@@ -4,13 +4,13 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
 import api.yahoo.finance.QueryString;
+import api.yahoo.finance.symbol.entity.ResSymbolLookup;
 
 public class SymbolLookup
 {
@@ -70,7 +70,7 @@ public class SymbolLookup
 
 		locPath = SymbolLookup.PATH_SYMBOL_LOOKUP + "?" + locQuery;
 
-		URL locURL = new URL(SymbolLookup.PROTOCOL_HTTP, SymbolLookup.HOST_SYMBOL_LOOKUP, locPath);
+		URL locURL = new URL(SymbolLookup.PROTOCOL_HTTPS, SymbolLookup.HOST_SYMBOL_LOOKUP, locPath);
 
 		return locURL;
 	}
@@ -119,72 +119,26 @@ public class SymbolLookup
 		return (this.proxy == null) ? false : true;
 	}
 
-	private void parseResponse(String response)
+	private ResSymbolLookup parseResponse(String response)
 	{
-
-		String locResponse = new String(
-				"{\"ResultSet\":{\"Query\":\"alphabet\",\"Result\":[{\"symbol\":\"GOOGL-USD.SW\",\"name\":\"Alphabet\",\"exch\":\"EBS\",\"type\":\"S\",\"exchDisp\":\"Swiss\",\"typeDisp\":\"Equity\"},{\"symbol\":\"GOOG\",\"name\":\"Alphabet Inc.\",\"exch\":\"NGM\",\"type\":\"S\",\"exchDisp\":\"NASDAQ\",\"typeDisp\":\"Equity\"},{\"symbol\":\"GOOGL\",\"name\":\"Alphabet Inc.\",\"exch\":\"NAS\",\"type\":\"S\",\"exchDisp\":\"NASDAQ\",\"typeDisp\":\"Equity\"},{\"symbol\":\"GOOG.SN\",\"name\":\"ALPHABET INC\",\"exch\":\"SGO\",\"type\":\"S\",\"exchDisp\":\"Santiago\",\"typeDisp\":\"Equity\"},{\"symbol\":\"GOOGL.SW\",\"name\":\"Alphabet Inc.\",\"exch\":\"EBS\",\"type\":\"S\",\"exchDisp\":\"Swiss\",\"typeDisp\":\"Equity\"},{\"symbol\":\"ABEC.MU\",\"name\":\"ALPHABET INC.CL C DL-,001\",\"exch\":\"MUN\",\"type\":\"S\",\"exchDisp\":\"Munich\",\"typeDisp\":\"Equity\"},{\"symbol\":\"ABEC.SG\",\"name\":\"Alphabet Inc. Reg. Shs Cap.Stk \",\"exch\":\"STU\",\"type\":\"S\",\"exchDisp\":\"Stuttgart\",\"typeDisp\":\"Equity\"},{\"symbol\":\"GOOC.VI\",\"name\":\"Alphabet Inc.\",\"exch\":\"VIE\",\"type\":\"S\",\"exchDisp\":\"Vienna\",\"typeDisp\":\"Equity\"},{\"symbol\":\"ABEA.F\",\"name\":\"Alphabet Inc.\",\"exch\":\"FRA\",\"type\":\"S\",\"exchDisp\":\"Frankfurt\",\"typeDisp\":\"Equity\"},{\"symbol\":\"ABEC.F\",\"name\":\"Alphabet Inc.\",\"exch\":\"FRA\",\"type\":\"S\",\"exchDisp\":\"Frankfurt\",\"typeDisp\":\"Equity\"}]}}");
-
 		Jsonb jsonb = JsonbBuilder.create();
 
-		ResSymbolLookup locResSymbolLookup = jsonb.fromJson(locResponse, ResSymbolLookup.class);
-
-		// JsonParser locJsonParser = Json.createParser(new
-		// StringReader(locResponse));
-		//
-		//
-		// while(locJsonParser.hasNext())
-		// {
-		// switch (locJsonParser.next())
-		// {
-		// case KEY_NAME: //ResultSet
-		//
-		// String key = locJsonParser.getString();
-		// locJsonParser.next();
-		//
-		// switch (key)
-		// {
-		// case "Query":
-		//// movie.setId(parser.getInt());
-		// break;
-		// case ""
-		// default:
-		// break;
-		// }
-		// break;
-		// default:
-		// break;
-		// }
-		//
-		// }
-		////
-		// JsonObject locJO = locJsonParser.getObject();
-		// JsonObject locResultSet = locJO.getJsonObject("ResultSet");
-		// JsonArray locResult = locResultSet.getJsonArray("Result");
-		//
-		// for (int i = 0, l = locResult.size(); l < i; i++) {
-		// JsonObject locR = locResult.getJsonObject(i);
-		// JsonString locSymbol = locR.getJsonString("symbol");
-		//
-		// System.out.println(locSymbol.toString());
-		// }
-
+		ResSymbolLookup locResSymbolLookup = jsonb.fromJson(response, ResSymbolLookup.class);
+		
+		return locResSymbolLookup;
 	}
 
-	public ArrayList<Symbol> getResult() throws Exception
+	public ResSymbolLookup getResult() throws Exception
 	{
-
-		ArrayList<Symbol> locSymbolList = new ArrayList<Symbol>();
-
+		ResSymbolLookup  locResSymbolLookup = new ResSymbolLookup();
+		
 		// get response
-		String locResponse = new String();// this.getResponse();
-
-		System.out.println(locResponse);
+		String locResponse = this.getResponse();
 
 		// parse response
-		this.parseResponse(locResponse);
+		locResSymbolLookup = this.parseResponse(locResponse);
 
-		return locSymbolList;
+		return locResSymbolLookup;
 	}
 
 	public String getQuery()

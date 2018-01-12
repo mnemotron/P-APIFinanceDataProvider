@@ -1,4 +1,4 @@
-package api.yahoo.finance.symbol;
+package api.yahoo.finance.symbol.entity;
 
 public class Symbol {
 	

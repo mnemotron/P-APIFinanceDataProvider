@@ -1,4 +1,4 @@
-package api.yahoo.finance.symbol;
+package api.yahoo.finance.symbol.entity;
 
 import java.util.ArrayList;
 import java.util.List;
