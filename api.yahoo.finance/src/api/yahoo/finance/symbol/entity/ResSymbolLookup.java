@@ -19,5 +19,9 @@ public class ResSymbolLookup
 		this.resultset = resultset;
 	}
 
+	public String toString()
+	{
+		return this.resultset.toString();
+	}
 
 }

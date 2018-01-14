@@ -32,5 +32,19 @@ public class ResultSet
 	{
 		this.result = result;
 	}
+	
+	public String toString()
+	{
+		StringBuilder locStringBuilder = new StringBuilder();
+		
+		locStringBuilder.append("query: " + this.getQuery() + "\n");
+		
+		for (Symbol symbol : result)
+		{
+			locStringBuilder.append(symbol.toString() + "\n");
+		}
+		
+		return locStringBuilder.toString();
+	}
 
 }

@@ -1,17 +1,20 @@
 package api.yahoo.finance.symbol;
 
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.Scanner;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
 import api.yahoo.finance.QueryString;
+import api.yahoo.finance.http.Get;
 import api.yahoo.finance.symbol.entity.ResSymbolLookup;
 
+/**
+ * Yahoo Finance Symbol Lookup
+ *
+ * @author  mnemotron
+ * @version 1.0.0
+ */
 public class SymbolLookup
 {
 
@@ -23,33 +26,51 @@ public class SymbolLookup
 	private static final String QUERY_REGION = "region";
 	private static final String QUERY_LANGUAGE = "lang";
 
-	private Proxy proxy;
+	private Get httpGet;
 	private String query;
+	
+    /**
+     * Region could be i.e.: EU
+     *     
+     * @since 1.0.0
+     */
 	private String region;
+	
+    /**
+     * Language could be i.e.: de-DE, en-GB
+     *     
+     * @since 1.0.0
+     */
 	private String language;
+	
+    /**
+     * HTTP Protocol could be HTTP, HTTPS
+     *     
+     * @since 1.0.0
+     */
+	private String protocol;
 
 	private SymbolLookup()
 	{
-
-		this.proxy = null;
 		this.query = new String();
 		this.region = new String();
 		this.language = new String();
+		this.protocol = PROTOCOL_HTTPS;
+		this.httpGet = new Get();
 	}
 
 	private SymbolLookup(String proxyHostname, int proxyPort)
 	{
-
 		this.query = new String();
 		this.region = new String();
 		this.language = new String();
-
-		this.proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHostname, proxyPort));
+		this.protocol = PROTOCOL_HTTPS;
+		
+		this.httpGet = new Get(proxyHostname, proxyPort);		
 	}
 
 	public static SymbolLookup FactoryGetInstance()
 	{
-
 		SymbolLookup locSymbolLookup = new SymbolLookup();
 
 		return locSymbolLookup;
@@ -57,7 +78,6 @@ public class SymbolLookup
 
 	public static SymbolLookup FactoryGetInstance(String proxyHostname, int proxyPort)
 	{
-
 		SymbolLookup locSymbolLookup = new SymbolLookup(proxyHostname, proxyPort);
 
 		return locSymbolLookup;
@@ -70,7 +90,7 @@ public class SymbolLookup
 
 		locPath = SymbolLookup.PATH_SYMBOL_LOOKUP + "?" + locQuery;
 
-		URL locURL = new URL(SymbolLookup.PROTOCOL_HTTPS, SymbolLookup.HOST_SYMBOL_LOOKUP, locPath);
+		URL locURL = new URL(this.protocol, SymbolLookup.HOST_SYMBOL_LOOKUP, locPath);
 
 		return locURL;
 	}
@@ -88,35 +108,13 @@ public class SymbolLookup
 
 	private String getResponse() throws Exception
 	{
-		String locResponse = new String();
-		URLConnection locURLC = null;
+		String locResponse = null;
+		
+		this.httpGet.setUrl(this.buildURL());
 
-		URL locURL = this.buildURL();
-
-		if (this.isProxy())
-		{
-			locURLC = locURL.openConnection(this.proxy);
-		}
-		else
-		{
-			locURLC = locURL.openConnection();
-		}
-
-		Scanner locScanner = new Scanner(locURLC.getInputStream());
-
-		while (locScanner.hasNext())
-		{
-			locResponse = locResponse.concat(locScanner.nextLine());
-		}
-
-		locScanner.close();
+		locResponse = this.httpGet.getResponse();
 
 		return locResponse;
-	}
-
-	private boolean isProxy()
-	{
-		return (this.proxy == null) ? false : true;
 	}
 
 	private ResSymbolLookup parseResponse(String response)
@@ -124,14 +122,14 @@ public class SymbolLookup
 		Jsonb jsonb = JsonbBuilder.create();
 
 		ResSymbolLookup locResSymbolLookup = jsonb.fromJson(response, ResSymbolLookup.class);
-		
+
 		return locResSymbolLookup;
 	}
 
 	public ResSymbolLookup getResult() throws Exception
 	{
-		ResSymbolLookup  locResSymbolLookup = new ResSymbolLookup();
-		
+		ResSymbolLookup locResSymbolLookup = new ResSymbolLookup();
+
 		// get response
 		String locResponse = this.getResponse();
 
@@ -169,5 +167,25 @@ public class SymbolLookup
 	public void setLanguage(String language)
 	{
 		this.language = language;
+	}
+
+	public Get getHttpGet()
+	{
+		return httpGet;
+	}
+
+	public void setHttpGet(Get httpGet)
+	{
+		this.httpGet = httpGet;
+	}
+
+	public String getProtocol()
+	{
+		return protocol;
+	}
+
+	public void setProtocol(String protocol)
+	{
+		this.protocol = protocol;
 	}
 }

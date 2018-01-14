@@ -15,11 +15,13 @@ public class TestSymbolLookup
 
 		locSL.setQuery("G");
 		locSL.setRegion("EU");
-		locSL.setLanguage("en-GB");
+		locSL.setLanguage("de-DE");
 
 		try
 		{
-			locResSymbolLookup = locSL.getResult();			
+			locResSymbolLookup = locSL.getResult();		
+			
+			System.out.println(locResSymbolLookup.toString());
 		}
 		catch (Exception e)
 		{
