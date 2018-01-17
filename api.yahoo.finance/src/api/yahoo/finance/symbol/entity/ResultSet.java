@@ -3,6 +3,12 @@ package api.yahoo.finance.symbol.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Result Set
+ * @author  mnemotron
+ * @version 1.0.0
+ * @since 2018-01-01
+ */
 public class ResultSet
 {
 	private String query;

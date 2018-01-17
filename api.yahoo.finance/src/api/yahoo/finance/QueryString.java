@@ -2,6 +2,12 @@ package api.yahoo.finance;
 
 import java.net.URLEncoder;
 
+/**
+ * Query String
+ * @author  mnemotron
+ * @version 1.0.0
+ * @since 2018-01-01
+ */
 public class QueryString {
 
 	private static final String ENCODING_UTF8 = "UTF-8";

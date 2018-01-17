@@ -7,6 +7,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Scanner;
 
+/**
+ * GET
+ * @author  mnemotron
+ * @version 1.0.0
+ * @since 2018-01-01
+ */
 public class Get
 {
 	private Proxy proxy;

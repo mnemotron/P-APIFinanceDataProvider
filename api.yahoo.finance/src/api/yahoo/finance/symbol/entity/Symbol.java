@@ -1,5 +1,11 @@
 package api.yahoo.finance.symbol.entity;
 
+/**
+ * Symbol Result
+ * @author  mnemotron
+ * @version 1.0.0
+ * @since 2018-01-01
+ */
 public class Symbol {
 	
 	private String symbol;
