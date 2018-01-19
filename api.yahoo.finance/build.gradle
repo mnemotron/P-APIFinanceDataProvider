@@ -1,0 +1,42 @@
+// PLUGINS
+apply plugin: 'java'
+
+// PARAMETER
+version = '1.0.0'
+
+// MANIFEST
+jar {
+    manifest {
+        attributes("Implementation-Title": rootProject.name,
+                   "Implementation-Version": version)
+    }
+}
+
+// DEPENDENCIES
+dependencies {
+	compile fileTree(dir: 'lib/httpcomponents-client-5.0-beta1', include: ['*.jar'])
+	compile fileTree(dir: 'lib/javax.json-1.1.2', include: ['*.jar'])
+	compile fileTree(dir: 'lib/javax.json.api-1.1.2', include: ['*.jar'])
+	compile fileTree(dir: 'lib/javax.json.bind.api-1.0.0', include: ['*.jar'])
+	compile fileTree(dir: 'lib/yasson-1.0.0', include: ['*.jar'])
+}
+
+// SOURCE SETS
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+        	srcDir 'src'
+        }
+    }
+}
+
+// TASKS
+task copyToLib(type: Copy) {
+    into "$buildDir/libs"
+    from configurations.runtime
+}
+
+build.dependsOn(copyToLib)
