@@ -1,1 +1,1 @@
-# API Yahoo Finance
+# API Stock Data Provider
