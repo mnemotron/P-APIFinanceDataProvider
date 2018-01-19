@@ -1,4 +1,4 @@
-package api.yahoo.finance.symbol;
+package api.finance.yahoo.symbol;
 
 import java.net.URL;
 
@@ -7,11 +7,19 @@ import javax.json.bind.JsonbBuilder;
 
 import org.apache.hc.core5.net.URIBuilder;
 
-import api.yahoo.finance.http.Get;
-import api.yahoo.finance.symbol.entity.ResSymbolLookup;
+import api.finance.yahoo.symbol.entity.ResSymbolLookup;
+import api.http.Get;
 
 /**
  * Yahoo Finance Symbol Lookup
+ * 
+ * For example:
+ * Request: URL <https://autoc.finance.yahoo.com/autoc?query=bmw&region=EU&lang=en-GB>
+ * Response: JSON (equal to the symbol lookup entities)
+ * 
+ * Alternative (not implemented):
+ * Request: URL <http://d.yimg.com/aq/autoc?query=bmw&region=DE&lang=en-US&callback=YAHOO.util.ScriptNodeDataSource.callbacks>
+ * 
  * @author  mnemotron
  * @version 1.0.0
  * @since 2018-01-01

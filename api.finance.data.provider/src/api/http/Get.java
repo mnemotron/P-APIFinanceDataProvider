@@ -1,4 +1,4 @@
-package api.yahoo.finance.http;
+package api.http;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

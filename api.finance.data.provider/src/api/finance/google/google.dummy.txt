@@ -1,0 +1,1 @@
+https://finance.google.com/finance/historical?q=AAPL&startdate=01-Jan-2010&output=csv

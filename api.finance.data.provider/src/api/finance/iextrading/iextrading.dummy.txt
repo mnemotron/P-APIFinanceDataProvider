@@ -1,0 +1,1 @@
+https://api.iextrading.com/1.0/stock/aapl/chart/5y?format=csv

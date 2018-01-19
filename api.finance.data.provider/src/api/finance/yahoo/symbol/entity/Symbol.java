@@ -1,4 +1,4 @@
-package api.yahoo.finance.symbol.entity;
+package api.finance.yahoo.symbol.entity;
 
 /**
  * Symbol Result
