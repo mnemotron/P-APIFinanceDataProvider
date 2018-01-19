@@ -38,6 +38,7 @@ public class Get
 
 	public String getResponse() throws IOException
 	{
+
 		String locResponse = new String();
 		URLConnection locURLC = null;
 

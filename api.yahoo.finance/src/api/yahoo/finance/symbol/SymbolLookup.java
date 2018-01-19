@@ -5,7 +5,8 @@ import java.net.URL;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
-import api.yahoo.finance.QueryString;
+import org.apache.hc.core5.net.URIBuilder;
+
 import api.yahoo.finance.http.Get;
 import api.yahoo.finance.symbol.entity.ResSymbolLookup;
 
@@ -102,30 +103,15 @@ public class SymbolLookup
 	 */
 	private URL buildURL() throws Exception
 	{
-		String locQuery = this.buildQueryString();
-		String locPath = new String();
+		URIBuilder locURIBuilder = new URIBuilder();
+		locURIBuilder.setScheme(this.protocol);
+		locURIBuilder.setHost(SymbolLookup.HOST_SYMBOL_LOOKUP);
+		locURIBuilder.setPath(SymbolLookup.PATH_SYMBOL_LOOKUP);
+		locURIBuilder.addParameter(SymbolLookup.QUERY_STRING, this.query);
+		locURIBuilder.addParameter(SymbolLookup.QUERY_REGION, this.region);
+		locURIBuilder.addParameter(SymbolLookup.QUERY_LANGUAGE, this.language);
 
-		locPath = SymbolLookup.PATH_SYMBOL_LOOKUP + "?" + locQuery;
-
-		URL locURL = new URL(this.protocol, SymbolLookup.HOST_SYMBOL_LOOKUP, locPath);
-
-		return locURL;
-	}
-
-	/**
-	 * Builds the symbol lookup query string
-	 * @return Query string
-	 * @throws Exception
-	 */
-	private String buildQueryString() throws Exception
-	{
-		QueryString locQString = new QueryString();
-
-		locQString.add(SymbolLookup.QUERY_STRING, this.query);
-		locQString.add(SymbolLookup.QUERY_REGION, this.region);
-		locQString.add(SymbolLookup.QUERY_LANGUAGE, this.language);
-
-		return locQString.getQuery();
+		return 	locURIBuilder.build().toURL();
 	}
 
 	/**
@@ -147,7 +133,6 @@ public class SymbolLookup
 	/**
 	 * Parses and binds the symbol lookup JSON response by JSON-B.
 	 * @param response Yahoo Finance JSON response
-	 * @see getResponse()
 	 * @return Symbol lookup response object (equal to Yahoo Finance JSON result)
 	 */
 	private ResSymbolLookup parseResponse(String response)

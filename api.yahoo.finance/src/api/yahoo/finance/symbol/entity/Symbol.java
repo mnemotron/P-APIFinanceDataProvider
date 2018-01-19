@@ -20,6 +20,10 @@ public class Symbol {
 		
 	}
 
+	/**
+	 * Yahoo Finance ticker ID
+	 * @return Ticker ID
+	 */
 	public String getSymbol() {
 		return symbol;
 	}
@@ -28,6 +32,10 @@ public class Symbol {
 		this.symbol = symbol;
 	}
 
+	/**
+	 * Name of the asset
+	 * @return Name
+	 */
 	public String getName() {
 		return name;
 	}
@@ -36,6 +44,10 @@ public class Symbol {
 		this.name = name;
 	}
 
+	/**
+	 * Exchange
+	 * @return Exchange
+	 */
 	public String getExch() {
 		return exch;
 	}
@@ -44,6 +56,10 @@ public class Symbol {
 		this.exch = exch;
 	}
 
+	/**
+	 * Asset type i.e. "S"hare
+	 * @return Asset Type
+	 */
 	public String getType() {
 		return type;
 	}
@@ -52,6 +68,10 @@ public class Symbol {
 		this.type = type;
 	}
 
+	/**
+	 * Exchange display string
+	 * @return Exchange display string
+	 */
 	public String getExchDisp() {
 		return exchDisp;
 	}
@@ -60,6 +80,10 @@ public class Symbol {
 		this.exchDisp = exchDisp;
 	}
 
+	/**
+	 * Asset type display string
+	 * @return Asset type display string
+	 */
 	public String getTypeDisp() {
 		return typeDisp;
 	}
