@@ -1,4 +1,4 @@
-# API Stock Data Provider
+# API Finance Data Provider
 
 ##### API Yahoo Finance
 + symbol lookup
