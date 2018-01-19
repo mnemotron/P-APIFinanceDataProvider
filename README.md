@@ -1,2 +1,1 @@
-# APIYahooFinance
-Yahoo Finance API
+# API Yahoo Finance
