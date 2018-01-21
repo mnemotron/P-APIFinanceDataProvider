@@ -7,8 +7,8 @@ import javax.json.bind.JsonbBuilder;
 
 import org.apache.hc.core5.net.URIBuilder;
 
+import api.core.http.HttpGet;
 import api.finance.yahoo.symbol.entity.ResSymbolLookup;
-import api.http.Get;
 
 /**
  * Yahoo Finance Symbol Lookup
@@ -35,7 +35,7 @@ public class SymbolLookup
 	private static final String QUERY_REGION = "region";
 	private static final String QUERY_LANGUAGE = "lang";
 
-	private Get httpGet;
+	private HttpGet httpGet;
 	private String query;
 	
     /**
@@ -62,7 +62,7 @@ public class SymbolLookup
 		this.region = new String();
 		this.language = new String();
 		this.protocol = PROTOCOL_HTTPS;
-		this.httpGet = new Get();
+		this.httpGet = new HttpGet();
 	}
 	
 	/**
@@ -77,7 +77,7 @@ public class SymbolLookup
 		this.language = new String();
 		this.protocol = PROTOCOL_HTTPS;
 		
-		this.httpGet = new Get(proxyHostname, proxyPort);		
+		this.httpGet = new HttpGet(proxyHostname, proxyPort);		
 	}
 
 	/**
@@ -226,12 +226,12 @@ public class SymbolLookup
 		this.language = language;
 	}
 
-	public Get getHttpGet()
+	public HttpGet getHttpGet()
 	{
 		return httpGet;
 	}
 
-	public void setHttpGet(Get httpGet)
+	public void setHttpGet(HttpGet httpGet)
 	{
 		this.httpGet = httpGet;
 	}

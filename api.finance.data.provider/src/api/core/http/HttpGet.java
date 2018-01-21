@@ -1,4 +1,4 @@
-package api.http;
+package api.core.http;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -13,24 +13,24 @@ import java.util.Scanner;
  * @version 1.0.0
  * @since 2018-01-01
  */
-public class Get
+public class HttpGet
 {
 	private Proxy proxy;
 	private URL url;
 
-	public Get()
+	public HttpGet()
 	{
 		this.proxy = null;
 		this.url = null;
 	}
 
-	public Get(String proxyHostname, int proxyPort)
+	public HttpGet(String proxyHostname, int proxyPort)
 	{
 		this.url = null;
 		this.proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHostname, proxyPort));
 	}
 
-	public Get(String proxyHostname, int proxyPort, URL url)
+	public HttpGet(String proxyHostname, int proxyPort, URL url)
 	{
 		this.url = url;
 		this.proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHostname, proxyPort));

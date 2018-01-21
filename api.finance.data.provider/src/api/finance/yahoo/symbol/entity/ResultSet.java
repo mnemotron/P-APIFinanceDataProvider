@@ -43,7 +43,7 @@ public class ResultSet
 	{
 		StringBuilder locStringBuilder = new StringBuilder();
 		
-		locStringBuilder.append("query: " + this.getQuery() + "\n");
+		locStringBuilder.append("query:" + this.getQuery() + "\n");
 		
 		for (Symbol symbol : result)
 		{

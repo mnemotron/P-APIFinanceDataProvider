@@ -94,6 +94,6 @@ public class Symbol {
 	
 	public String toString()
 	{
-		return new String("{ " + "symbol:" + this.symbol + "; " + "name:" + this.name + "; " + "exch:" + this.exch + "; " + "type:" + this.type + "; " + "exchDisp:" + this.exchDisp + "; " + "typeDisp:" + this.typeDisp + " }");
+		return new String("{ " + "symbol:" + this.symbol + ", " + "name:" + this.name + ", " + "exch:" + this.exch + ", " + "type:" + this.type + ", " + "exchDisp:" + this.exchDisp + ", " + "typeDisp:" + this.typeDisp + " }");
 	}
 }
