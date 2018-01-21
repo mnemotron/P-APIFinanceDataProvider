@@ -1,0 +1,13 @@
+https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20=%20%22TRQ%22and%20startDate%20=%20%222016-06-25%22and%20endDate%20=%20%222016-07-03%22&format=json&diagnostics=true&env=store://datatables.org/alltableswithkeys
+
+
+https://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.historicaldata where symbol="BMW" and startDate = "2016-06-25" and endDate = "2016-07-03"&format=json&diagnostics=true&env=store://datatables.org/alltableswithkeys
+
+WORKS:
+https://query1.finance.yahoo.com/v8/finance/chart/AAPL?interval=2m
+
+
+    AAPL substituted with your stock ticker
+    interval one of [1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo]
+    optional period1 query param with your epoch range start date e.g. period1=1510340760
+    optional period2 query param with your epoch range end date e.g. period2=1510663712

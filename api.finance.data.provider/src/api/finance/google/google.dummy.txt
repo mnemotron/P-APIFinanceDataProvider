@@ -1,1 +1,6 @@
 https://finance.google.com/finance/historical?q=AAPL&startdate=01-Jan-2010&output=csv
+
+http://www.google.com/finance/historical?q=" & Symbol & "&startdate=" & startdate & "&enddate=Nov+1%2C+2019&output=csv
+
+Works:
+https://finance.google.com/finance/historical?cid=694653&startdate=Jan+1%2C+2010&enddate=Jan+1%2C+2018&output=csv
