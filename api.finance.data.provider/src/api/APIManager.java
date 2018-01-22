@@ -8,6 +8,7 @@ import api.core.histquote.Interval;
 import api.core.histquote.entity.HistoricalQuotes;
 import api.core.quote.entity.Quote;
 import api.core.ticker.entity.Tickers;
+import api.finance.google.APIFinanceGoogle;
 import api.finance.simulation.APIFinanceSimulation;
 import api.finance.yahoo.APIFinanceYahoo;
 
@@ -41,6 +42,10 @@ public class APIManager implements InterfaceDataProvider
 		{
 		case YAHOO_FINANCE:
 			this.dataProvider = new APIFinanceYahoo();
+			break;
+			
+		case GOOGLE_FINANCE:
+			this.dataProvider = new APIFinanceGoogle();
 			break;
 
 		case SIMULATION:

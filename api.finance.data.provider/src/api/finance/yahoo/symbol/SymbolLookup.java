@@ -8,6 +8,7 @@ import javax.json.bind.JsonbBuilder;
 import org.apache.hc.core5.net.URIBuilder;
 
 import api.core.http.HttpGet;
+import api.core.http.Scheme;
 import api.finance.yahoo.symbol.entity.ResSymbolLookup;
 
 /**
@@ -26,9 +27,6 @@ import api.finance.yahoo.symbol.entity.ResSymbolLookup;
  */
 public class SymbolLookup
 {
-
-	private static final String PROTOCOL_HTTP = "http";
-	private static final String PROTOCOL_HTTPS = "https";
 	private static final String HOST_SYMBOL_LOOKUP = "autoc.finance.yahoo.com";
 	private static final String PATH_SYMBOL_LOOKUP = "/autoc";
 	private static final String QUERY_STRING = "query";
@@ -51,7 +49,7 @@ public class SymbolLookup
     /**
      * HTTP Protocol could be HTTP, HTTPS
      */
-	private String protocol;
+	private Scheme protocol;
 
 	/**
 	 * Default Constructor
@@ -61,7 +59,7 @@ public class SymbolLookup
 		this.query = new String();
 		this.region = new String();
 		this.language = new String();
-		this.protocol = PROTOCOL_HTTPS;
+		this.protocol = Scheme.HTTPS;
 		this.httpGet = new HttpGet();
 	}
 	
@@ -75,7 +73,7 @@ public class SymbolLookup
 		this.query = new String();
 		this.region = new String();
 		this.language = new String();
-		this.protocol = PROTOCOL_HTTPS;
+		this.protocol = Scheme.HTTPS;
 		
 		this.httpGet = new HttpGet(proxyHostname, proxyPort);		
 	}
@@ -112,7 +110,7 @@ public class SymbolLookup
 	private URL buildURL() throws Exception
 	{
 		URIBuilder locURIBuilder = new URIBuilder();
-		locURIBuilder.setScheme(this.protocol);
+		locURIBuilder.setScheme(this.protocol.getScheme());
 		locURIBuilder.setHost(SymbolLookup.HOST_SYMBOL_LOOKUP);
 		locURIBuilder.setPath(SymbolLookup.PATH_SYMBOL_LOOKUP);
 		locURIBuilder.addParameter(SymbolLookup.QUERY_STRING, this.query);
@@ -159,7 +157,7 @@ public class SymbolLookup
 	 */
 	public ResSymbolLookup getResult() throws Exception
 	{
-		ResSymbolLookup locResSymbolLookup = new ResSymbolLookup();
+		ResSymbolLookup locResSymbolLookup;
 
 		// get response
 		String locResponse = this.getResponse();
@@ -236,7 +234,7 @@ public class SymbolLookup
 		this.httpGet = httpGet;
 	}
 
-	public String getProtocol()
+	public Scheme getProtocol()
 	{
 		return protocol;
 	}
@@ -246,7 +244,7 @@ public class SymbolLookup
 	 * For example: HTTP, HTTPS
 	 * @param protocol
 	 */
-	public void setProtocol(String protocol)
+	public void setProtocol(Scheme protocol)
 	{
 		this.protocol = protocol;
 	}
