@@ -4,3 +4,5 @@ http://www.google.com/finance/historical?q=" & Symbol & "&startdate=" & startdat
 
 Works:
 https://finance.google.com/finance/historical?cid=694653&startdate=Jan+1%2C+2010&enddate=Jan+1%2C+2018&output=csv
+
+https://finance.google.com/finance/historical?cid=694653&startdate=01.01.2010&enddate=01.01.2018&output=csv

@@ -2,12 +2,13 @@ package api.finance.google.histquote.entity;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvDate;
+import java.util.Date;
 
 public class HistQuote {
 
-	@CsvBindByName
+	@CsvBindByName(locale = "en")
 	@CsvDate("dd-MMM-yy")
-	private java.util.Date Date;
+	private Date Date;
 
 	@CsvBindByName
 	private double Open;
@@ -27,6 +28,14 @@ public class HistQuote {
 	public HistQuote()
 	{
 		
+	}
+
+	public java.util.Date getDate() {
+		return Date;
+	}
+
+	public void setDate(java.util.Date date) {
+		Date = date;
 	}
 
 	public double getOpen() {
@@ -68,4 +77,5 @@ public class HistQuote {
 	public void setVolume(double volume) {
 		Volume = volume;
 	}
+
 }

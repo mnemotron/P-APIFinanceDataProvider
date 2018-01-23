@@ -1,11 +1,12 @@
 package api.core.http;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Scanner;
 
 /**
  * GET
@@ -40,6 +41,7 @@ public class HttpGet
 	{
 
 		String locResponse = new String();
+	    int intValueOfChar;
 		URLConnection locURLC = null;
 
 		if (this.isProxy())
@@ -50,15 +52,15 @@ public class HttpGet
 		{
 			locURLC = this.url.openConnection();
 		}
+		
+	    Reader responseReader = new InputStreamReader(locURLC.getInputStream());	
 
-		Scanner locScanner = new Scanner(locURLC.getInputStream());
-
-		while (locScanner.hasNext())
-		{
-			locResponse = locResponse.concat(locScanner.nextLine());
-		}
-
-		locScanner.close();
+	    while((intValueOfChar = responseReader.read()) != -1)
+	    {
+	    	locResponse += (char) intValueOfChar;
+	    }
+	 
+	    responseReader.close();
 
 		return locResponse;
 	}

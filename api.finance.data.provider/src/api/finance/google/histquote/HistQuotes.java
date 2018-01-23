@@ -1,5 +1,7 @@
 package api.finance.google.histquote;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.StringReader;
 import java.net.URL;
 import java.text.DateFormat;
@@ -141,7 +143,7 @@ public class HistQuotes {
 	private ResHistQuotes parseResponse(String response)
 	{
 		ResHistQuotes locResHistQuotes = new ResHistQuotes();
-		
+			
 		List<HistQuote> locHistQuoteList = new CsvToBeanBuilder<HistQuote>(new StringReader(response)).withType(HistQuote.class).build().parse();
 
 		locResHistQuotes.setHistQuoteList(new ArrayList<HistQuote>(locHistQuoteList));
