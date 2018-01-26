@@ -138,7 +138,7 @@ public class FGHistQuotes
 
 		this.httpGet.setUrl(this.buildURL());
 
-		this.httpGet.connect();
+		this.httpGet.sendGet();
 		locResponse = this.httpGet.getResponse();
 
 		return locResponse;

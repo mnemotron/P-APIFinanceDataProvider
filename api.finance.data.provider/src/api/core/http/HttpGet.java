@@ -42,7 +42,7 @@ public class HttpGet
 		this.proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHostname, proxyPort));
 	}
 	
-	public void connect() throws IOException
+	public void sendGet() throws IOException
 	{
 	    int intValueOfChar;
 		URLConnection locURLC = null;

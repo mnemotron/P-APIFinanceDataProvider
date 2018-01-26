@@ -1,16 +1,21 @@
 package api.finance.google.symbol;
 
+import java.net.URI;
 import java.net.URL;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
+import org.apache.hc.client5.http.cookie.Cookie;
+import org.apache.hc.client5.http.cookie.CookieStore;
 import org.apache.hc.core5.net.URIBuilder;
 
+import api.core.http.HttpClient;
 import api.core.http.HttpGet;
 import api.core.http.Scheme;
 import api.finance.google.symbol.entity.FGResSymbolLookup;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -98,7 +103,7 @@ public class FGSymbolLookup
 	 * @return URL
 	 * @throws Exception
 	 */
-	private URL buildURL() throws Exception
+	private URI buildURI() throws Exception
 	{
 		URIBuilder locURIBuilder = new URIBuilder();
 		locURIBuilder.setScheme(this.protocol.getScheme());
@@ -107,17 +112,17 @@ public class FGSymbolLookup
 		locURIBuilder.addParameter(FGSymbolLookup.QUERY_MATCHTYPE, FGSymbolLookup.VALUE_MATCHTYPE);
 		locURIBuilder.addParameter(FGSymbolLookup.QUERY_STRING, this.query);
 
-		return locURIBuilder.build().toURL();
+		return locURIBuilder.build();
 	}
 	
-	private URL buildURLP3PCookie() throws Exception
+	private URI buildURIP3PCookie() throws Exception
 	{
 		URIBuilder locURIBuilder = new URIBuilder();
 		locURIBuilder.setScheme(this.protocol.getScheme());
 		locURIBuilder.setHost(FGSymbolLookup.HOST_SYMBOL_LOOKUP);
 		locURIBuilder.setPath(FGSymbolLookup.PATH_SYMBOL_LOOKUP_FINANCE);
 
-		return locURIBuilder.build().toURL();
+		return locURIBuilder.build();
 	}
 	
 	/**
@@ -131,20 +136,38 @@ public class FGSymbolLookup
 		String locResponse = null;
 
 		//P3P cookie request
-		this.httpGet.setUrl(this.buildURLP3PCookie());
-		this.httpGet.connect();
+		HttpClient locHttpClient = new HttpClient(this.buildURIP3PCookie());
 		
-		Map<String, List<String>> locHeaderFieldList = this.httpGet.getHeaderFields();
+		locHttpClient.sendGet();
 		
-		List<String> locCookie = locHeaderFieldList.get("Set-Cookie");
+		CookieStore locResCookieStore = locHttpClient.getResCookieStore();
 		
-		//symbol lookup request
-		this.httpGet.setUrl(this.buildURL());
-		this.httpGet.connect();
-		locResponse = this.httpGet.getResponse();
+		List<Cookie> locCookieList = locResCookieStore.getCookies();
 		
-
-		return locResponse;
+		
+		// symbol lookup request with cookies
+		HttpClient locReqHttpClient = new HttpClient(this.buildURI());
+		
+		locReqHttpClient.sendGet();
+		
+		return locReqHttpClient.getResponse();
+		
+		
+		
+//		this.httpGet.setUrl(this.buildURLP3PCookie());
+//		this.httpGet.sendGet();
+//		
+//		Map<String, List<String>> locHeaderFieldList = this.httpGet.getHeaderFields();
+//		
+//		List<String> locCookie = locHeaderFieldList.get("Set-Cookie");
+//		
+//		//symbol lookup request
+//		this.httpGet.setUrl(this.buildURL());
+//		this.httpGet.sendGet();
+//		locResponse = this.httpGet.getResponse();
+//		
+//
+//		return locResponse;
 	}
 	
 	/**
