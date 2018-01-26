@@ -70,7 +70,6 @@ public class APIFinanceSimulation implements InterfaceDataProvider
 		}
 
 		locHistoricalQuotes.setTickerID(tickerID);
-		locHistoricalQuotes.setTickerName(tickerID);
 		locHistoricalQuotes.setFrom(from);
 		locHistoricalQuotes.setTo(to);
 		locHistoricalQuotes.setInterval(interval);

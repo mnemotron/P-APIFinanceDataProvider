@@ -8,7 +8,6 @@ import api.core.histquote.Interval;
 public class HistoricalQuotes
 {
 	private String tickerID;
-	private String tickerName;
 	private Interval interval;
 	private Calendar from;
 	private Calendar to;
@@ -37,16 +36,6 @@ public class HistoricalQuotes
 	public void setTickerID(String tickerID)
 	{
 		this.tickerID = tickerID;
-	}
-
-	public String getTickerName()
-	{
-		return tickerName;
-	}
-
-	public void setTickerName(String tickerName)
-	{
-		this.tickerName = tickerName;
 	}
 
 	public Interval getInterval()
@@ -90,15 +79,6 @@ public class HistoricalQuotes
 		else
 		{
 			locStringBuilder.append("tickerID:" + "null" + "\n");
-		}
-		
-		if(this.interval!= null)
-		{	
-			locStringBuilder.append("tickerName:" + this.getTickerName() + "\n");
-		}
-		else
-		{
-			locStringBuilder.append("tickerName:" + "null" + "\n");
 		}
 		
 		if(this.interval!= null)

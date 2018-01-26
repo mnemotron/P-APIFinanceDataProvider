@@ -14,8 +14,8 @@ import com.opencsv.bean.CsvToBeanBuilder;
 
 import api.core.http.HttpGet;
 import api.core.http.Scheme;
-import api.finance.google.histquote.entity.HistQuote;
-import api.finance.google.histquote.entity.ResHistQuotes;
+import api.finance.google.histquote.entity.FGHistoricalQuote;
+import api.finance.google.histquote.entity.FGHistoricalQuotes;
 
 /**
  * Google Finance Historical Quotes
@@ -28,7 +28,8 @@ import api.finance.google.histquote.entity.ResHistQuotes;
  * @version 1.1.0
  * @since 2018-01-22
  */
-public class HistQuotes {
+public class FGHistQuotes
+{
 
 	private static final String HOST_SYMBOL_LOOKUP = "finance.google.com";
 	private static final String PATH_SYMBOL_LOOKUP = "/finance/historical";
@@ -47,7 +48,8 @@ public class HistQuotes {
 	/**
 	 * Default Constructor
 	 */
-	private HistQuotes() {
+	private FGHistQuotes()
+	{
 		this.from = null;
 		this.to = null;
 		this.protocol = Scheme.HTTPS;
@@ -62,7 +64,8 @@ public class HistQuotes {
 	 * @param proxyPort
 	 *            The proxy port
 	 */
-	private HistQuotes(String proxyHostname, int proxyPort) {
+	private FGHistQuotes(String proxyHostname, int proxyPort)
+	{
 		this.from = null;
 		this.to = null;
 		this.protocol = Scheme.HTTPS;
@@ -74,8 +77,9 @@ public class HistQuotes {
 	 * 
 	 * @return Historical quotes instance
 	 */
-	public static HistQuotes FactoryGetInstance() {
-		HistQuotes locHistQuotes = new HistQuotes();
+	public static FGHistQuotes FactoryGetInstance()
+	{
+		FGHistQuotes locHistQuotes = new FGHistQuotes();
 
 		return locHistQuotes;
 	}
@@ -89,8 +93,9 @@ public class HistQuotes {
 	 *            The proxy port
 	 * @return Historical quotes instance
 	 */
-	public static HistQuotes FactoryGetInstance(String proxyHostname, int proxyPort) {
-		HistQuotes locHistQuotes = new HistQuotes(proxyHostname, proxyPort);
+	public static FGHistQuotes FactoryGetInstance(String proxyHostname, int proxyPort)
+	{
+		FGHistQuotes locHistQuotes = new FGHistQuotes(proxyHostname, proxyPort);
 
 		return locHistQuotes;
 	}
@@ -101,21 +106,22 @@ public class HistQuotes {
 	 * @return URL
 	 * @throws Exception
 	 */
-	private URL buildURL() throws Exception {
+	private URL buildURL() throws Exception
+	{
 		URIBuilder locURIBuilder = new URIBuilder();
 		locURIBuilder.setScheme(this.protocol.getScheme());
-		locURIBuilder.setHost(HistQuotes.HOST_SYMBOL_LOOKUP);
-		locURIBuilder.setPath(HistQuotes.PATH_SYMBOL_LOOKUP);
-		locURIBuilder.addParameter(HistQuotes.QUERY_TICKERID, this.tickerID);
+		locURIBuilder.setHost(FGHistQuotes.HOST_SYMBOL_LOOKUP);
+		locURIBuilder.setPath(FGHistQuotes.PATH_SYMBOL_LOOKUP);
+		locURIBuilder.addParameter(FGHistQuotes.QUERY_TICKERID, this.tickerID);
 
 		// TODO Google Query Date Format
 		DateFormat locDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 		String locStartDate = locDateFormat.format(this.from.getTime());
 		String locEndDate = locDateFormat.format(this.to.getTime());
 
-		locURIBuilder.addParameter(HistQuotes.QUERY_START_DATE, locStartDate);
-		locURIBuilder.addParameter(HistQuotes.QUERY_END_DATE, locEndDate);
-		locURIBuilder.addParameter(HistQuotes.QUERY_OUTPUT, VALUE_OUTPUT_CSV);
+		locURIBuilder.addParameter(FGHistQuotes.QUERY_START_DATE, locStartDate);
+		locURIBuilder.addParameter(FGHistQuotes.QUERY_END_DATE, locEndDate);
+		locURIBuilder.addParameter(FGHistQuotes.QUERY_OUTPUT, VALUE_OUTPUT_CSV);
 
 		return locURIBuilder.build().toURL();
 	}
@@ -126,11 +132,13 @@ public class HistQuotes {
 	 * @return CSV
 	 * @throws Exception
 	 */
-	private String getResponse() throws Exception {
+	private String getResponse() throws Exception
+	{
 		String locResponse = null;
 
 		this.httpGet.setUrl(this.buildURL());
 
+		this.httpGet.connect();
 		locResponse = this.httpGet.getResponse();
 
 		return locResponse;
@@ -142,13 +150,13 @@ public class HistQuotes {
 	 * @param CSV
 	 * @return Historical quote response object
 	 */
-	private ResHistQuotes parseResponse(String response) 
+	private FGHistoricalQuotes parseResponse(String response)
 	{
-		ResHistQuotes locResHistQuotes = new ResHistQuotes();
+		FGHistoricalQuotes locResHistQuotes = new FGHistoricalQuotes();
 
-		List<HistQuote> locHistQuoteList = new CsvToBeanBuilder<HistQuote>(new StringReader(response)).withType(HistQuote.class).build().parse();
+		List<FGHistoricalQuote> locHistQuoteList = new CsvToBeanBuilder<FGHistoricalQuote>(new StringReader(response)).withType(FGHistoricalQuote.class).build().parse();
 
-		locResHistQuotes.setHistQuoteList(new ArrayList<HistQuote>(locHistQuoteList));
+		locResHistQuotes.setHistQuoteList(new ArrayList<FGHistoricalQuote>(locHistQuoteList));
 
 		return locResHistQuotes;
 	}
@@ -159,8 +167,9 @@ public class HistQuotes {
 	 * @return Historical quote response object
 	 * @throws Exception
 	 */
-	public ResHistQuotes getResult() throws Exception {
-		ResHistQuotes locResHistQuotes;
+	public FGHistoricalQuotes getResult() throws Exception
+	{
+		FGHistoricalQuotes locResHistQuotes;
 
 		// get response
 		String locResponse = this.getResponse();
@@ -171,43 +180,53 @@ public class HistQuotes {
 		return locResHistQuotes;
 	}
 
-	public Calendar getFrom() {
+	public Calendar getFrom()
+	{
 		return from;
 	}
 
-	public void setFrom(Calendar from) {
+	public void setFrom(Calendar from)
+	{
 		this.from = from;
 	}
 
-	public Calendar getTo() {
+	public Calendar getTo()
+	{
 		return to;
 	}
 
-	public void setTo(Calendar to) {
+	public void setTo(Calendar to)
+	{
 		this.to = to;
 	}
 
-	public Scheme getProtocol() {
+	public Scheme getProtocol()
+	{
 		return protocol;
 	}
 
-	public void setProtocol(Scheme protocol) {
+	public void setProtocol(Scheme protocol)
+	{
 		this.protocol = protocol;
 	}
 
-	public HttpGet getHttpGet() {
+	public HttpGet getHttpGet()
+	{
 		return httpGet;
 	}
 
-	public void setHttpGet(HttpGet httpGet) {
+	public void setHttpGet(HttpGet httpGet)
+	{
 		this.httpGet = httpGet;
 	}
 
-	public String getTickerID() {
+	public String getTickerID()
+	{
 		return tickerID;
 	}
 
-	public void setTickerID(String tickerID) {
+	public void setTickerID(String tickerID)
+	{
 		this.tickerID = tickerID;
 	}
 }

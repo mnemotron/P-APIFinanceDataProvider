@@ -6,11 +6,11 @@ package api.finance.yahoo.symbol.entity;
  * @version 1.0.0
  * @since 2018-01-01
  */
-public class ResSymbolLookup
+public class FYResSymbolLookup
 {
 	private ResultSet resultset;
 	
-	public ResSymbolLookup()
+	public FYResSymbolLookup()
 	{
 		
 	}

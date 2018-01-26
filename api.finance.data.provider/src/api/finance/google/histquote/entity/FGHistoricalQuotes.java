@@ -3,14 +3,14 @@ package api.finance.google.histquote.entity;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class ResHistQuotes {
+public class FGHistoricalQuotes {
 
 	private String tickerID;
 	private Calendar from;
 	private Calendar to;
-	private ArrayList<HistQuote> histQuoteList = new ArrayList<HistQuote>();
+	private ArrayList<FGHistoricalQuote> histQuoteList = new ArrayList<FGHistoricalQuote>();
 
-	public ResHistQuotes() {
+	public FGHistoricalQuotes() {
 
 	}
 
@@ -38,11 +38,11 @@ public class ResHistQuotes {
 		this.to = to;
 	}
 
-	public ArrayList<HistQuote> getHistQuoteList() {
+	public ArrayList<FGHistoricalQuote> getHistQuoteList() {
 		return histQuoteList;
 	}
 
-	public void setHistQuoteList(ArrayList<HistQuote> histQuoteList) {
+	public void setHistQuoteList(ArrayList<FGHistoricalQuote> histQuoteList) {
 		this.histQuoteList = histQuoteList;
 	}
 }

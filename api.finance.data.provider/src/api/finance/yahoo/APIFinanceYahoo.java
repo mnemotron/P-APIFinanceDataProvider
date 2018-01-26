@@ -10,8 +10,8 @@ import api.core.histquote.entity.HistoricalQuotes;
 import api.core.quote.entity.Quote;
 import api.core.ticker.entity.Ticker;
 import api.core.ticker.entity.Tickers;
-import api.finance.yahoo.symbol.SymbolLookup;
-import api.finance.yahoo.symbol.entity.ResSymbolLookup;
+import api.finance.yahoo.symbol.FYSymbolLookup;
+import api.finance.yahoo.symbol.entity.FYResSymbolLookup;
 import api.finance.yahoo.symbol.entity.ResultSet;
 import api.finance.yahoo.symbol.entity.Symbol;
 
@@ -38,14 +38,14 @@ public class APIFinanceYahoo implements InterfaceDataProvider
 		ArrayList<Ticker> locTickerList = new ArrayList<Ticker>();
 
 		// call API
-		SymbolLookup locSL = SymbolLookup.FactoryGetInstance();
+		FYSymbolLookup locSL = FYSymbolLookup.FactoryGetInstance();
 
 		locSL.setQuery(query);
 		// TODO Language, Region
 		locSL.setRegion("EU");
 		locSL.setLanguage("de-DE");
 
-		ResSymbolLookup locResSymbolLookup = locSL.getResult();
+		FYResSymbolLookup locResSymbolLookup = locSL.getResult();
 
 		// map to result
 		ResultSet locResultSet = locResSymbolLookup.getResultset();

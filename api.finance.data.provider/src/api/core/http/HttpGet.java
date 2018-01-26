@@ -7,6 +7,8 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * GET
@@ -18,6 +20,9 @@ public class HttpGet
 {
 	private Proxy proxy;
 	private URL url;
+	
+	private String response;
+	private Map<String, List<String>> headerFields;
 
 	public HttpGet()
 	{
@@ -36,11 +41,9 @@ public class HttpGet
 		this.url = url;
 		this.proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHostname, proxyPort));
 	}
-
-	public String getResponse() throws IOException
+	
+	public void connect() throws IOException
 	{
-
-		String locResponse = new String();
 	    int intValueOfChar;
 		URLConnection locURLC = null;
 
@@ -53,16 +56,16 @@ public class HttpGet
 			locURLC = this.url.openConnection();
 		}
 		
+		this.headerFields = locURLC.getHeaderFields();
+		
 	    Reader responseReader = new InputStreamReader(locURLC.getInputStream());	
 
 	    while((intValueOfChar = responseReader.read()) != -1)
 	    {
-	    	locResponse += (char) intValueOfChar;
+	    	this.response += (char) intValueOfChar;
 	    }
 	 
 	    responseReader.close();
-
-		return locResponse;
 	}
 
 	public Proxy getProxy()
@@ -88,5 +91,25 @@ public class HttpGet
 	private boolean isProxy()
 	{
 		return (this.proxy == null) ? false : true;
+	}
+
+	public String getResponse()
+	{
+		return response;
+	}
+
+	public void setResponse(String response)
+	{
+		this.response = response;
+	}
+
+	public Map<String, List<String>> getHeaderFields()
+	{
+		return headerFields;
+	}
+
+	public void setHeaderFields(Map<String, List<String>> headerFields)
+	{
+		this.headerFields = headerFields;
 	}
 }
