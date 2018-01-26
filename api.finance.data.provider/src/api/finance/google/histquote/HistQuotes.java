@@ -1,7 +1,5 @@
 package api.finance.google.histquote;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.StringReader;
 import java.net.URL;
 import java.text.DateFormat;
@@ -22,16 +20,16 @@ import api.finance.google.histquote.entity.ResHistQuotes;
 /**
  * Google Finance Historical Quotes
  * 
- * For example:
- * Request: URL <https://finance.google.com/finance/historical?q=GOOGL&startdate=Jan+1%2C+2010&enddate=Jan+1%2C+2018&output=csv>
+ * For example: Request: URL
+ * <https://finance.google.com/finance/historical?q=GOOGL&startdate=Jan+1%2C+2010&enddate=Jan+1%2C+2018&output=csv>
  * Response: CSV
  * 
- * @author  mnemotron
+ * @author mnemotron
  * @version 1.1.0
  * @since 2018-01-22
  */
 public class HistQuotes {
-	
+
 	private static final String HOST_SYMBOL_LOOKUP = "finance.google.com";
 	private static final String PATH_SYMBOL_LOOKUP = "/finance/historical";
 	private static final String QUERY_TICKERID = "q";
@@ -39,43 +37,44 @@ public class HistQuotes {
 	private static final String QUERY_END_DATE = "enddate";
 	private static final String QUERY_OUTPUT = "output";
 	private static final String VALUE_OUTPUT_CSV = "csv";
-	
+
 	private Calendar from;
 	private Calendar to;
 	private Scheme protocol;
 	private HttpGet httpGet;
 	private String tickerID;
-	
+
 	/**
 	 * Default Constructor
 	 */
-	private HistQuotes()
-	{
+	private HistQuotes() {
 		this.from = null;
-		this.to= null;
+		this.to = null;
 		this.protocol = Scheme.HTTPS;
 		this.httpGet = new HttpGet();
 	}
-	
+
 	/**
 	 * Constructor
-	 * @param proxyHostname The proxy hostname
-	 * @param proxyPort The proxy port
+	 * 
+	 * @param proxyHostname
+	 *            The proxy hostname
+	 * @param proxyPort
+	 *            The proxy port
 	 */
-	private HistQuotes(String proxyHostname, int proxyPort)
-	{	
+	private HistQuotes(String proxyHostname, int proxyPort) {
 		this.from = null;
-		this.to= null;
+		this.to = null;
 		this.protocol = Scheme.HTTPS;
-		this.httpGet = new HttpGet(proxyHostname, proxyPort);		
+		this.httpGet = new HttpGet(proxyHostname, proxyPort);
 	}
-	
+
 	/**
 	 * Factory
+	 * 
 	 * @return Historical quotes instance
 	 */
-	public static HistQuotes FactoryGetInstance()
-	{
+	public static HistQuotes FactoryGetInstance() {
 		HistQuotes locHistQuotes = new HistQuotes();
 
 		return locHistQuotes;
@@ -83,81 +82,84 @@ public class HistQuotes {
 
 	/**
 	 * Factory
-	 * @param proxyHostname The proxy hostname
-	 * @param proxyPort The proxy port
+	 * 
+	 * @param proxyHostname
+	 *            The proxy hostname
+	 * @param proxyPort
+	 *            The proxy port
 	 * @return Historical quotes instance
 	 */
-	public static HistQuotes FactoryGetInstance(String proxyHostname, int proxyPort)
-	{
+	public static HistQuotes FactoryGetInstance(String proxyHostname, int proxyPort) {
 		HistQuotes locHistQuotes = new HistQuotes(proxyHostname, proxyPort);
 
 		return locHistQuotes;
 	}
-	
+
 	/**
 	 * Builds the URL
+	 * 
 	 * @return URL
 	 * @throws Exception
 	 */
-	private URL buildURL() throws Exception
-	{
+	private URL buildURL() throws Exception {
 		URIBuilder locURIBuilder = new URIBuilder();
 		locURIBuilder.setScheme(this.protocol.getScheme());
 		locURIBuilder.setHost(HistQuotes.HOST_SYMBOL_LOOKUP);
 		locURIBuilder.setPath(HistQuotes.PATH_SYMBOL_LOOKUP);
 		locURIBuilder.addParameter(HistQuotes.QUERY_TICKERID, this.tickerID);
-		
+
 		// TODO Google Query Date Format
-        DateFormat locDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        String locStartDate = locDateFormat.format(this.from.getTime());
-        String locEndDate = locDateFormat.format(this.to.getTime());
-		
+		DateFormat locDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+		String locStartDate = locDateFormat.format(this.from.getTime());
+		String locEndDate = locDateFormat.format(this.to.getTime());
+
 		locURIBuilder.addParameter(HistQuotes.QUERY_START_DATE, locStartDate);
 		locURIBuilder.addParameter(HistQuotes.QUERY_END_DATE, locEndDate);
 		locURIBuilder.addParameter(HistQuotes.QUERY_OUTPUT, VALUE_OUTPUT_CSV);
 
-		return 	locURIBuilder.build().toURL();
+		return locURIBuilder.build().toURL();
 	}
-	
+
 	/**
 	 * Submits the historical quote request and returns the CSV result.
+	 * 
 	 * @return CSV
 	 * @throws Exception
 	 */
-	private String getResponse() throws Exception
-	{
+	private String getResponse() throws Exception {
 		String locResponse = null;
-		
+
 		this.httpGet.setUrl(this.buildURL());
 
 		locResponse = this.httpGet.getResponse();
 
 		return locResponse;
 	}
-	
+
 	/**
 	 * Parses and binds the historical quote CSV response.
+	 * 
 	 * @param CSV
 	 * @return Historical quote response object
 	 */
-	private ResHistQuotes parseResponse(String response)
+	private ResHistQuotes parseResponse(String response) 
 	{
 		ResHistQuotes locResHistQuotes = new ResHistQuotes();
-			
+
 		List<HistQuote> locHistQuoteList = new CsvToBeanBuilder<HistQuote>(new StringReader(response)).withType(HistQuote.class).build().parse();
 
 		locResHistQuotes.setHistQuoteList(new ArrayList<HistQuote>(locHistQuoteList));
-		
+
 		return locResHistQuotes;
 	}
-	
+
 	/**
 	 * Get result
+	 * 
 	 * @return Historical quote response object
 	 * @throws Exception
 	 */
-	public ResHistQuotes getResult() throws Exception
-	{
+	public ResHistQuotes getResult() throws Exception {
 		ResHistQuotes locResHistQuotes;
 
 		// get response

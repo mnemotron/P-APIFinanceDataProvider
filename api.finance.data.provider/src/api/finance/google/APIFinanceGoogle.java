@@ -1,7 +1,9 @@
 package api.finance.google;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import api.core.InterfaceDataProvider;
 import api.core.histquote.Interval;
@@ -35,31 +37,54 @@ public class APIFinanceGoogle implements InterfaceDataProvider {
 	@Override
 	public HistoricalQuotes getHistoricalQuotes(String tickerID, Calendar from, Calendar to, Interval interval)
 			throws Exception {
-		
+
 		HistoricalQuotes locHistoricalQuotes = new HistoricalQuotes();
-		
+		ArrayList<HistoricalQuote> locHistoricalQuoteList = new ArrayList<HistoricalQuote>();
+		SimpleDateFormat locDateFormatter = new SimpleDateFormat("dd-MMM-yy");
+
 		HistQuotes locHistQuotes = HistQuotes.FactoryGetInstance();
-		
+
 		locHistQuotes.setTickerID(tickerID);
 		locHistQuotes.setFrom(from);
 		locHistQuotes.setTo(to);
-		
+
 		ResHistQuotes locResHistQuotes = locHistQuotes.getResult();
-		
+
 		// map to result
 		locHistoricalQuotes.setTickerID(locResHistQuotes.getTickerID());
-		
+
 		ArrayList<HistQuote> locHistQuote = locResHistQuotes.getHistQuoteList();
-		
+
 		for (HistQuote histQuote : locHistQuote) {
 			HistoricalQuote locHistoricalQuote = new HistoricalQuote();
-			
+			Calendar locCalendar = null;
 
+			if (histQuote.getDate() != null) {
+				try {
+					Date locDate = locDateFormatter.parse(histQuote.getDate());
+					locCalendar = Calendar.getInstance();
+					locCalendar.setTime(locDate);
+
+				} catch (Exception e) {
+
+				}
+			}
+			
+			locHistoricalQuote.setDate(locCalendar);
+			locHistoricalQuote.setOpen(histQuote.getOpen());
+			locHistoricalQuote.setHigh(histQuote.getHigh());
+			locHistoricalQuote.setLow(histQuote.getLow());
+			locHistoricalQuote.setClose(histQuote.getClose());
+			locHistoricalQuote.setVolume(histQuote.getVolume());
+
+			locHistoricalQuoteList.add(locHistoricalQuote);
 		}
-		
-//		locHistoricalQuotes.setHistoricalQuoteList();
-		
-		
+
+		locHistoricalQuotes.setTickerID(tickerID);
+		locHistoricalQuotes.setFrom(from);
+		locHistoricalQuotes.setTo(to);
+		locHistoricalQuotes.setHistoricalQuoteList(locHistoricalQuoteList);
+
 		return locHistoricalQuotes;
 	}
 

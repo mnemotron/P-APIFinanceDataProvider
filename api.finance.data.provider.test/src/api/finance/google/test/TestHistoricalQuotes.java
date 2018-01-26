@@ -16,7 +16,7 @@ public class TestHistoricalQuotes
 		{	
 			HistoricalQuotes locHistoricalQuotes = locAPIManager.getHistoricalQuotes("GOOGL", TimePeriod.YEAR_1, null);
 			
-			System.out.println("TEST");
+			System.out.println(locHistoricalQuotes.toString());
 		}
 		catch (Exception e)
 		{

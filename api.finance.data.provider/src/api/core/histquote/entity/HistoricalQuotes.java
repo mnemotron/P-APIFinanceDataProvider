@@ -83,11 +83,51 @@ public class HistoricalQuotes
 	{
 		StringBuilder locStringBuilder = new StringBuilder();
 
-		locStringBuilder.append("tickerID:" + this.getTickerID() + "\n");
-		locStringBuilder.append("tickerName:" + this.getTickerName() + "\n");
-		locStringBuilder.append("interval:" + this.getInterval().getInterval() + "\n");
-		locStringBuilder.append("from:" + this.getFrom().toInstant().toString() + "\n");
-		locStringBuilder.append("to:" + this.getTo().toInstant().toString() + "\n");
+		if(this.tickerID != null)
+		{
+			locStringBuilder.append("tickerID:" + this.getTickerID() + "\n");
+		}
+		else
+		{
+			locStringBuilder.append("tickerID:" + "null" + "\n");
+		}
+		
+		if(this.interval!= null)
+		{	
+			locStringBuilder.append("tickerName:" + this.getTickerName() + "\n");
+		}
+		else
+		{
+			locStringBuilder.append("tickerName:" + "null" + "\n");
+		}
+		
+		if(this.interval!= null)
+		{
+			locStringBuilder.append("interval:" + this.getInterval().getInterval() + "\n");
+		}
+		else
+		{
+			locStringBuilder.append("interval:" + "null" + "\n");
+		}
+		
+		if(this.from != null)
+		{
+			locStringBuilder.append("from:" + this.getFrom().toInstant().toString() + "\n");
+		}
+		else
+		{
+			locStringBuilder.append("from:" + "null" + "\n");
+		}
+		
+		if(this.to != null)
+		{
+			locStringBuilder.append("to:" + this.getTo().toInstant().toString() + "\n");	
+		}
+		else
+		{
+			locStringBuilder.append("to:" + "null" + "\n");
+		}
+
 
 		for (HistoricalQuote historicalQuote : historicalQuoteList)
 		{

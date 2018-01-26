@@ -78,6 +78,17 @@ public class HistoricalQuote
 	
 	public String toString()
 	{
-		return new String("{ " + "date:" + this.date.toInstant().toString() + ", " + "close:" + this.close + ", " + "open:" + this.open + ", " + "low:" + this.low + ", " + "high:" + this.high + ", " + "volume:" + this.volume + " }");
+		String locDate = new String();
+		
+		if (this.date != null)
+		{
+			locDate = this.date.toInstant().toString();
+		}
+		else
+		{
+			locDate = "null";
+		}
+		
+		return new String("{ " + "date:" + locDate + ", " + "close:" + this.close + ", " + "open:" + this.open + ", " + "low:" + this.low + ", " + "high:" + this.high + ", " + "volume:" + this.volume + " }");
 	}
 }
