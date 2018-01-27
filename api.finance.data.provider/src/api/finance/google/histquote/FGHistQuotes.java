@@ -1,5 +1,7 @@
 package api.finance.google.histquote;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.StringReader;
 import java.net.URL;
 import java.text.DateFormat;
@@ -134,7 +136,7 @@ public class FGHistQuotes
 	 */
 	private String getResponse() throws Exception
 	{
-		String locResponse = null;
+		String locResponse;
 
 		this.httpGet.setUrl(this.buildURL());
 

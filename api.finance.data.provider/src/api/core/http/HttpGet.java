@@ -28,18 +28,21 @@ public class HttpGet
 	{
 		this.proxy = null;
 		this.url = null;
+		this.response = new String();
 	}
 
 	public HttpGet(String proxyHostname, int proxyPort)
 	{
 		this.url = null;
 		this.proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHostname, proxyPort));
+		this.response = new String();
 	}
 
 	public HttpGet(String proxyHostname, int proxyPort, URL url)
 	{
 		this.url = url;
 		this.proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHostname, proxyPort));
+		this.response = new String();
 	}
 	
 	public void sendGet() throws IOException

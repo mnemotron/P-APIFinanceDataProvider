@@ -1,14 +1,14 @@
 package api.finance.google.histquote.entity;
 
 import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvCustomBindByName;
-
-import api.core.ConvertValueToDate;
+import com.opencsv.bean.CsvDate;
+import java.util.Date;
 
 public class FGHistoricalQuote {
 
-	@CsvCustomBindByName(converter = ConvertValueToDate.class)
-	private java.util.Date Date;
+	@CsvBindByName(locale = "en")
+    @CsvDate("dd-MMM-yy")
+	private Date Date;
 	
 	@CsvBindByName(locale = "en")
 	private double Open;
@@ -25,12 +25,12 @@ public class FGHistoricalQuote {
 	@CsvBindByName
 	private long Volume;
 
-	public java.util.Date getDate()
+	public Date getDate()
 	{
 		return Date;
 	}
 
-	public void setDate(java.util.Date date)
+	public void setDate(Date date)
 	{
 		Date = date;
 	}

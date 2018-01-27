@@ -4,7 +4,6 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.protocol.HttpClientContext;
-import org.apache.hc.core5.net.URIBuilder;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -107,24 +106,5 @@ public class HttpClient
 	public void setResCookieStore(CookieStore resCookieStore)
 	{
 		this.resCookieStore = resCookieStore;
-	}
-
-	public static void main(String[] args)
-	{
-		URIBuilder locURIBuilder = new URIBuilder();
-		locURIBuilder.setScheme("HTTPS");
-		locURIBuilder.setHost("finance.google.com");
-		locURIBuilder.setPath("/finance");
-
-		try
-		{
-			HttpClient locC = new HttpClient(locURIBuilder.build());
-
-			locC.sendGet();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
 }
