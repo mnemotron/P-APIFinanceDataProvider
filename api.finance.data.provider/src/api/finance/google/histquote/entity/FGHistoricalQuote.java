@@ -8,80 +8,80 @@ public class FGHistoricalQuote {
 
 	@CsvBindByName(locale = "en")
     @CsvDate("dd-MMM-yy")
-	private Date Date;
+	private Date date;
 	
 	@CsvBindByName(locale = "en")
-	private double Open;
+	private double open;
 	
 	@CsvBindByName(locale = "en")
-	private double High;
+	private double high;
 	
 	@CsvBindByName(locale = "en")
-	private double Low;
+	private double low;
 	
 	@CsvBindByName(locale = "en")
-	private double Close;
+	private double close;
 	
 	@CsvBindByName
-	private long Volume;
+	private long volume;
 
 	public Date getDate()
 	{
-		return Date;
+		return date;
 	}
 
 	public void setDate(Date date)
 	{
-		Date = date;
+		this.date = date;
 	}
 
 	public double getOpen()
 	{
-		return Open;
+		return open;
 	}
 
 	public void setOpen(double open)
 	{
-		Open = open;
+		this.open = open;
 	}
 
 	public double getHigh()
 	{
-		return High;
+		return high;
 	}
 
 	public void setHigh(double high)
 	{
-		High = high;
+		this.high = high;
 	}
 
 	public double getLow()
 	{
-		return Low;
+		return low;
 	}
 
 	public void setLow(double low)
 	{
-		Low = low;
+		this.low = low;
 	}
 
 	public double getClose()
 	{
-		return Close;
+		return close;
 	}
 
 	public void setClose(double close)
 	{
-		Close = close;
+		this.close = close;
 	}
 
 	public long getVolume()
 	{
-		return Volume;
+		return volume;
 	}
 
 	public void setVolume(long volume)
 	{
-		Volume = volume;
+		this.volume = volume;
 	}
 }

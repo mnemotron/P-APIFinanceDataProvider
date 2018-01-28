@@ -156,8 +156,18 @@ public class FGHistQuotes
 	{
 		FGHistoricalQuotes locResHistQuotes = new FGHistoricalQuotes();
 
-		List<FGHistoricalQuote> locHistQuoteList = new CsvToBeanBuilder<FGHistoricalQuote>(new StringReader(response)).withType(FGHistoricalQuote.class).build().parse();
+		List<FGHistoricalQuote> locHistQuoteList = 
+				new CsvToBeanBuilder<FGHistoricalQuote>(new StringReader(response))
+						.withType(FGHistoricalQuote.class)
+						.build()
+						.parse();
 
+        List<FGHistoricalQuote> result =
+                new CsvToBeanBuilder<FGHistoricalQuote>(new StringReader("Date,Open,High,Low,Close,Volume\n26-Jan-18,1187.53,1187.56,1168.03,1187.56,2108502\n8-Dec-17,1051.81,1056.42,1045.86,1049.38,1558472"))
+                        .withType(FGHistoricalQuote.class)
+                        .build()
+                        .parse();
+		
 		locResHistQuotes.setHistQuoteList(new ArrayList<FGHistoricalQuote>(locHistQuoteList));
 
 		return locResHistQuotes;
