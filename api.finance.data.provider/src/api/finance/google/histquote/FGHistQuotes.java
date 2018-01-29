@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
@@ -110,9 +112,10 @@ public class FGHistQuotes
 	 * Builds the URL
 	 * 
 	 * @return URL
-	 * @throws Exception
+	 * @throws URISyntaxException 
+	 * @throws MalformedURLException 
 	 */
-	private URL buildURL() throws Exception
+	private URL buildURL() throws MalformedURLException, URISyntaxException
 	{
 		URIBuilder locURIBuilder = new URIBuilder();
 		locURIBuilder.setScheme(this.protocol.getScheme());
@@ -136,17 +139,23 @@ public class FGHistQuotes
 	 * Submits the historical quote request and returns the CSV result.
 	 * 
 	 * @return CSV
-	 * @throws Exception
+	 * @throws URISyntaxException 
+	 * @throws MalformedURLException 
 	 */
-	private String getResponse() throws Exception
+	private String getResponse() throws MalformedURLException, URISyntaxException
 	{
-		String locResponse;
+		String locResponse = new String();
 
 		this.httpGet.setUrl(this.buildURL());
 
-		this.httpGet.sendGet();
-		locResponse = this.httpGet.getResponse();
-
+		try {
+			this.httpGet.sendGet();
+			
+			locResponse = this.httpGet.getResponse();
+		} catch (IOException e) {
+			
+		}
+	
 		return locResponse;
 	}
 
@@ -183,17 +192,22 @@ public class FGHistQuotes
 	 * Get result
 	 * 
 	 * @return Historical quote response object
-	 * @throws Exception
+	 * @throws IOException 
+	 * @throws UnsupportedEncodingException 
+	 * @throws URISyntaxException 
 	 */
-	public FGHistoricalQuotes getResult() throws Exception
+	public FGHistoricalQuotes getResult() throws UnsupportedEncodingException, IOException, URISyntaxException
 	{
-		FGHistoricalQuotes locResHistQuotes;
+		FGHistoricalQuotes locResHistQuotes = new FGHistoricalQuotes();
 
 		// get response
 		String locResponse = this.getResponse();
-
-		// parse response
-		locResHistQuotes = this.parseResponse(locResponse);
+		
+		if (!locResponse.isEmpty())
+		{
+			// parse response
+			locResHistQuotes = this.parseResponse(locResponse);
+		}
 
 		return locResHistQuotes;
 	}

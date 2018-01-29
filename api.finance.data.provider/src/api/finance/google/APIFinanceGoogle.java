@@ -30,7 +30,7 @@ public class APIFinanceGoogle implements InterfaceDataProvider
 {
 
 	@Override
-	public Tickers searchTicker(String query) throws Exception
+	public Tickers searchTicker(String query) throws Exception 
 	{
 		Tickers locTickers = new Tickers();
 		ArrayList<Ticker> locTickerList = new ArrayList<Ticker>();
