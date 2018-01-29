@@ -14,10 +14,17 @@ jar {
 
 // DEPENDENCIES
 dependencies {
+	compile fileTree(dir: 'lib/api.finance.data.provider-1.1.0', include: ['*.jar'])
+	compile fileTree(dir: 'lib/commons-beanutils-1.9.3', include: ['*.jar'])
+	compile fileTree(dir: 'lib/commons-collections-3.2.2', include: ['*.jar'])
+	compile fileTree(dir: 'lib/commons-io-2.6', include: ['*.jar'])
+	compile fileTree(dir: 'lib/commons-lang3-3.7', include: ['*.jar'])
+	compile fileTree(dir: 'lib/commons-logging-1.2', include: ['*.jar'])
 	compile fileTree(dir: 'lib/httpcomponents-client-5.0-beta1', include: ['*.jar'])
 	compile fileTree(dir: 'lib/javax.json-1.1.2', include: ['*.jar'])
 	compile fileTree(dir: 'lib/javax.json.api-1.1.2', include: ['*.jar'])
 	compile fileTree(dir: 'lib/javax.json.bind.api-1.0.0', include: ['*.jar'])
+	compile fileTree(dir: 'lib/opencsv-4.1', include: ['*.jar'])
 	compile fileTree(dir: 'lib/yasson-1.0.0', include: ['*.jar'])
 }
 

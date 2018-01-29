@@ -1,7 +1,7 @@
 package api.finance.google.symbol;
 
+import java.io.File;
 import java.net.URI;
-import java.net.URL;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
@@ -9,22 +9,32 @@ import javax.json.bind.JsonbBuilder;
 import org.apache.hc.client5.http.cookie.Cookie;
 import org.apache.hc.client5.http.cookie.CookieStore;
 import org.apache.hc.core5.net.URIBuilder;
+import org.ehcache.Cache;
+import org.ehcache.CacheManager;
+import org.ehcache.PersistentCacheManager;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.CacheManagerBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.ehcache.config.units.EntryUnit;
+import org.ehcache.config.units.MemoryUnit;
 
 import api.core.http.HttpClient;
 import api.core.http.HttpGet;
 import api.core.http.Scheme;
 import api.finance.google.symbol.entity.FGResSymbolLookup;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Google Finance Symbol Lookup
  * 
  * For example: 
- * Request: URL <https://finance.google.com/finance/match?matchtype=matchall&q=google>
- * Response: JSON (equal to the symbol lookup entities)
+ * 
+ * 1. 	Request to get the P3P Cookie: URL <https://finance.google.com/finance>
+ * 		Response: P3P Cookie
+ * 
+ * 2. 	Request: URL <https://finance.google.com/finance/match?matchtype=matchall&q=google>
+ * 		Response: JSON (equal to the symbol lookup entities)
  * 
  * @author mnemotron
  * @version 1.1.0
@@ -140,10 +150,9 @@ public class FGSymbolLookup
 		
 		locHttpClient.sendGet();
 		
-		CookieStore locResCookieStore = locHttpClient.getResCookieStore();
+		CookieStore locCookieStore = locHttpClient.getCookieStore();
 		
-		List<Cookie> locCookieList = locResCookieStore.getCookies();
-		
+		this.writeCache(locCookieStore.getCookies().get(0).getValue());
 		
 		// symbol lookup request with cookies
 		HttpClient locReqHttpClient = new HttpClient(this.buildURI());
@@ -168,6 +177,33 @@ public class FGSymbolLookup
 //		
 //
 //		return locResponse;
+	}
+	
+	private void writeCache(String string)
+	{
+
+
+		PersistentCacheManager persistentCacheManager = CacheManagerBuilder.newCacheManagerBuilder()
+				.with(CacheManagerBuilder.persistence(new File("./", "cookieStore"))) 
+				.withCache("threeTieredCache",CacheConfigurationBuilder.newCacheConfigurationBuilder(Long.class, String.class, ResourcePoolsBuilder.newResourcePoolsBuilder()
+						.heap(10, EntryUnit.ENTRIES) 
+						.offheap(1, MemoryUnit.MB) 
+						.disk(20, MemoryUnit.MB, true) )  ).build(true);
+
+		Cache<Long, String> threeTieredCache = persistentCacheManager.getCache("threeTieredCache", Long.class, String.class);
+		
+		threeTieredCache.put(1L, string); 
+		
+		persistentCacheManager.close();
+
+
+
+//CacheConfiguration<Long, String> cacheConfiguration = CacheConfigurationBuilder.newCacheConfigurationBuilder(Long.class, String.class,
+//        ResourcePoolsBuilder.heap(100)) 
+//    .withExpiry(Expirations.timeToLiveExpiration(Duration.of(20, TimeUnit.SECONDS))) 
+//    .build();
+
+
 	}
 	
 	/**

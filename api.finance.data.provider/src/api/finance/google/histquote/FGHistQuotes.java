@@ -164,7 +164,9 @@ public class FGHistQuotes
 		
 	    InputStreamReader locReaderBOM = new InputStreamReader(new BOMInputStream(IOUtils.toInputStream(response, StandardCharsets.UTF_8.name())), StandardCharsets.UTF_8.name());
 		
-		 String locResponseWithoutBOM = IOUtils.toString(locReaderBOM);
+		String locResponseWithoutBOM = IOUtils.toString(locReaderBOM);
+		
+		locReaderBOM.close();
 		
 		List<FGHistoricalQuote> locHistQuoteList = 
 				new CsvToBeanBuilder<FGHistoricalQuote>(new StringReader(locResponseWithoutBOM))
