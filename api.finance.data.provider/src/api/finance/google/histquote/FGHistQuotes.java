@@ -1,15 +1,19 @@
 package api.finance.google.histquote;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.BOMInputStream;
 import org.apache.hc.core5.net.URIBuilder;
 
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -151,22 +155,22 @@ public class FGHistQuotes
 	 * 
 	 * @param CSV
 	 * @return Historical quote response object
+	 * @throws IOException 
+	 * @throws UnsupportedEncodingException 
 	 */
-	private FGHistoricalQuotes parseResponse(String response)
+	private FGHistoricalQuotes parseResponse(String response) throws UnsupportedEncodingException, IOException
 	{
 		FGHistoricalQuotes locResHistQuotes = new FGHistoricalQuotes();
-
+		
+	    InputStreamReader locReaderBOM = new InputStreamReader(new BOMInputStream(IOUtils.toInputStream(response, StandardCharsets.UTF_8.name())), StandardCharsets.UTF_8.name());
+		
+		 String locResponseWithoutBOM = IOUtils.toString(locReaderBOM);
+		
 		List<FGHistoricalQuote> locHistQuoteList = 
-				new CsvToBeanBuilder<FGHistoricalQuote>(new StringReader(response))
+				new CsvToBeanBuilder<FGHistoricalQuote>(new StringReader(locResponseWithoutBOM))
 						.withType(FGHistoricalQuote.class)
 						.build()
 						.parse();
-
-        List<FGHistoricalQuote> result =
-                new CsvToBeanBuilder<FGHistoricalQuote>(new StringReader("Date,Open,High,Low,Close,Volume\n26-Jan-18,1187.53,1187.56,1168.03,1187.56,2108502\n8-Dec-17,1051.81,1056.42,1045.86,1049.38,1558472"))
-                        .withType(FGHistoricalQuote.class)
-                        .build()
-                        .parse();
 		
 		locResHistQuotes.setHistQuoteList(new ArrayList<FGHistoricalQuote>(locHistQuoteList));
 
