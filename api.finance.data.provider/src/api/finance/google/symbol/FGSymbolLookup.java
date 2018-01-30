@@ -9,15 +9,9 @@ import javax.json.bind.JsonbBuilder;
 import org.apache.hc.client5.http.cookie.Cookie;
 import org.apache.hc.client5.http.cookie.CookieStore;
 import org.apache.hc.core5.net.URIBuilder;
-import org.ehcache.Cache;
-import org.ehcache.CacheManager;
-import org.ehcache.PersistentCacheManager;
-import org.ehcache.config.builders.CacheConfigurationBuilder;
-import org.ehcache.config.builders.CacheManagerBuilder;
-import org.ehcache.config.builders.ResourcePoolsBuilder;
-import org.ehcache.config.units.EntryUnit;
-import org.ehcache.config.units.MemoryUnit;
 
+import api.core.cache.CacheCookieStore;
+import api.core.cache.CacheManager;
 import api.core.http.HttpClient;
 import api.core.http.HttpGet;
 import api.core.http.Scheme;
@@ -48,9 +42,13 @@ public class FGSymbolLookup
 	private static final String QUERY_MATCHTYPE = "matchtype";
 	private static final String QUERY_STRING = "q";
 	private static final String VALUE_MATCHTYPE = "matchall";
+	
+	private static final String CACHE_ID_COOKIE = "cacheCookie";
+	private static final String CACHE_KEY_COOKIE = "P3P";
 
 	private HttpGet httpGet;
 	private String query;
+	private CacheManager cacheManager;
 
 	/**
 	 * HTTP Protocol
@@ -65,6 +63,8 @@ public class FGSymbolLookup
 		this.query = new String();
 		this.protocol = Scheme.HTTPS;
 		this.httpGet = new HttpGet();
+		
+		this.cacheManager = new CacheManager(FGSymbolLookup.CACHE_ID_COOKIE);
 	}
 
 	/**
@@ -79,6 +79,8 @@ public class FGSymbolLookup
 		this.protocol = Scheme.HTTPS;
 
 		this.httpGet = new HttpGet(proxyHostname, proxyPort);
+		
+		this.cacheManager = new CacheManager(FGSymbolLookup.CACHE_ID_COOKIE);
 	}
 
 	/**
@@ -142,68 +144,31 @@ public class FGSymbolLookup
 	 * @throws Exception
 	 */
 	private String getResponse() throws Exception
-	{
-		String locResponse = null;
+	{	
+		HttpClient locHttpClient = new HttpClient();
 
-		//P3P cookie request
-		HttpClient locHttpClient = new HttpClient(this.buildURIP3PCookie());
+		if (!this.cacheManager.isCacheValid(FGSymbolLookup.CACHE_KEY_COOKIE))
+		{
+			//P3P cookie request
+			locHttpClient.setUri(this.buildURIP3PCookie());
+			locHttpClient.sendGet();
 		
-		locHttpClient.sendGet();
-		
-		CookieStore locCookieStore = locHttpClient.getCookieStore();
-		
-		this.writeCache(locCookieStore.getCookies().get(0).getValue());
+			CookieStore locCookieStore = locHttpClient.getCookieStore();
+			
+			this.cacheManager.addToCache(FGSymbolLookup.CACHE_KEY_COOKIE, new CacheCookieStore());
+		}
+		else
+		{
+			//P3P cookie from cache
+			List<Cookie> locCookieList = (List<Cookie>) this.cacheManager.getFromCache(FGSymbolLookup.CACHE_KEY_COOKIE);
+			
+		}
 		
 		// symbol lookup request with cookies
-		HttpClient locReqHttpClient = new HttpClient(this.buildURI());
+		locHttpClient.setUri(this.buildURI());
+		locHttpClient.sendGet();
 		
-		locReqHttpClient.sendGet();
-		
-		return locReqHttpClient.getResponse();
-		
-		
-		
-//		this.httpGet.setUrl(this.buildURLP3PCookie());
-//		this.httpGet.sendGet();
-//		
-//		Map<String, List<String>> locHeaderFieldList = this.httpGet.getHeaderFields();
-//		
-//		List<String> locCookie = locHeaderFieldList.get("Set-Cookie");
-//		
-//		//symbol lookup request
-//		this.httpGet.setUrl(this.buildURL());
-//		this.httpGet.sendGet();
-//		locResponse = this.httpGet.getResponse();
-//		
-//
-//		return locResponse;
-	}
-	
-	private void writeCache(String string)
-	{
-
-
-		PersistentCacheManager persistentCacheManager = CacheManagerBuilder.newCacheManagerBuilder()
-				.with(CacheManagerBuilder.persistence(new File("./", "cookieStore"))) 
-				.withCache("threeTieredCache",CacheConfigurationBuilder.newCacheConfigurationBuilder(Long.class, String.class, ResourcePoolsBuilder.newResourcePoolsBuilder()
-						.heap(10, EntryUnit.ENTRIES) 
-						.offheap(1, MemoryUnit.MB) 
-						.disk(20, MemoryUnit.MB, true) )  ).build(true);
-
-		Cache<Long, String> threeTieredCache = persistentCacheManager.getCache("threeTieredCache", Long.class, String.class);
-		
-		threeTieredCache.put(1L, string); 
-		
-		persistentCacheManager.close();
-
-
-
-//CacheConfiguration<Long, String> cacheConfiguration = CacheConfigurationBuilder.newCacheConfigurationBuilder(Long.class, String.class,
-//        ResourcePoolsBuilder.heap(100)) 
-//    .withExpiry(Expirations.timeToLiveExpiration(Duration.of(20, TimeUnit.SECONDS))) 
-//    .build();
-
-
+		return locHttpClient.getResponse();
 	}
 	
 	/**
