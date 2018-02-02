@@ -15,7 +15,7 @@ public class TestSymbolLookup
 		{
 			Tickers locTickers = locAPIManager.searchTicker("G");
 
-			System.out.println(locTickers.toString());
+			System.out.println(locTickers.toString()); 
 
 		}
 		catch (Exception e)

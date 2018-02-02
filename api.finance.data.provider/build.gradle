@@ -10,7 +10,7 @@ jar {
         attributes("Implementation-Title": rootProject.name,
                    "Implementation-Version": version)
     }
-}
+} 
 
 // DEPENDENCIES
 dependencies {
