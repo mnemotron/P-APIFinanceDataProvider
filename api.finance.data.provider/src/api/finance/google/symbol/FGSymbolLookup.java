@@ -1,3 +1,26 @@
+/*
+ *  MIT License
+ *
+ * Copyright (c) 2018 mnemotron
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package api.finance.google.symbol;
 
 import java.net.URI;
@@ -11,7 +34,6 @@ import org.apache.hc.core5.net.URIBuilder;
 
 import api.core.cache.CacheCookieManager;
 import api.core.http.HttpClient;
-import api.core.http.HttpGet;
 import api.core.http.Scheme;
 import api.finance.google.symbol.entity.FGResSymbolLookup;
 
@@ -42,7 +64,6 @@ public class FGSymbolLookup
 
 	private static final String CACHE_KEY_COOKIE = "P3P";
 
-	private HttpGet httpGet;
 	private String query;
 	private CacheCookieManager cacheCookieManager;
 
@@ -58,26 +79,6 @@ public class FGSymbolLookup
 	{
 		this.query = new String();
 		this.protocol = Scheme.HTTPS;
-		this.httpGet = new HttpGet();
-
-		this.cacheCookieManager = new CacheCookieManager();
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param proxyHostname
-	 *            The proxy hostname
-	 * @param proxyPort
-	 *            The proxy port
-	 */
-	private FGSymbolLookup(String proxyHostname, int proxyPort)
-	{
-		this.query = new String();
-		this.protocol = Scheme.HTTPS;
-
-		this.httpGet = new HttpGet(proxyHostname, proxyPort);
-
 		this.cacheCookieManager = new CacheCookieManager();
 	}
 
@@ -89,22 +90,6 @@ public class FGSymbolLookup
 	public static FGSymbolLookup FactoryGetInstance()
 	{
 		FGSymbolLookup locSymbolLookup = new FGSymbolLookup();
-
-		return locSymbolLookup;
-	}
-
-	/**
-	 * Factory
-	 * 
-	 * @param proxyHostname
-	 *            The proxy hostname
-	 * @param proxyPort
-	 *            The proxy port
-	 * @return Symbol lookup instance
-	 */
-	public static FGSymbolLookup FactoryGetInstance(String proxyHostname, int proxyPort)
-	{
-		FGSymbolLookup locSymbolLookup = new FGSymbolLookup(proxyHostname, proxyPort);
 
 		return locSymbolLookup;
 	}
@@ -145,8 +130,8 @@ public class FGSymbolLookup
 	 */
 	private String getResponse() throws Exception
 	{
-		HttpClient locHttpClient = new HttpClient();
-		String locResponse = null;
+		HttpClient locHttpClient = HttpClient.FactoryGetInstance(null);
+		String locResponse = new String();
 
 		if (!this.cacheCookieManager.isCacheValid(FGSymbolLookup.CACHE_KEY_COOKIE))
 		{
@@ -173,7 +158,7 @@ public class FGSymbolLookup
 		locHttpClient.sendGet();
 
 		// return result
-		if (locHttpClient.getResponseHeader().getCode() == HttpStatus.SC_OK)
+		if (locHttpClient.getCode() == HttpStatus.SC_OK)
 		{
 			locResponse = locHttpClient.getResponse();
 		}
@@ -206,28 +191,15 @@ public class FGSymbolLookup
 	 */
 	public FGResSymbolLookup getResult() throws Exception
 	{
-		FGResSymbolLookup locFGResSymbolLookup = null;
+		FGResSymbolLookup locFGResSymbolLookup = new FGResSymbolLookup();
 
 		// get response
 		String locResponse = this.getResponse();
 
 		// parse response
-		if (locResponse != null)
-		{
-			locFGResSymbolLookup = this.parseResponse(locResponse);
-		}
+		locFGResSymbolLookup = this.parseResponse(locResponse);
 
 		return locFGResSymbolLookup;
-	}
-
-	public HttpGet getHttpGet()
-	{
-		return httpGet;
-	}
-
-	public void setHttpGet(HttpGet httpGet)
-	{
-		this.httpGet = httpGet;
 	}
 
 	public Scheme getProtocol()

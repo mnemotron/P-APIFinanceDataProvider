@@ -13,7 +13,7 @@ public class TestSymbolLookup
 
 		try
 		{
-			Tickers locTickers = locAPIManager.searchTicker("Google");
+			Tickers locTickers = locAPIManager.searchTicker("GOOGL");
 
 			System.out.println(locTickers.toString());
 

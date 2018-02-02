@@ -1,29 +1,64 @@
+/*
+ *  MIT License
+ *
+ * Copyright (c) 2018 mnemotron
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package api.core.histquote.entity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import api.core.histquote.Interval;
 
+/**
+ * BEAN Historical Quotes
+ * 
+ * @author mnemotron
+ * @version 1.1.0
+ * @since 2018-01-22
+ */
 public class HistoricalQuotes
 {
 	private String tickerID;
 	private Interval interval;
 	private Calendar from;
 	private Calendar to;
-	private ArrayList<HistoricalQuote> historicalQuoteList;
+	private List<HistoricalQuote> historicalQuoteList;
 
 	public HistoricalQuotes()
 	{
 		this.historicalQuoteList = new ArrayList<HistoricalQuote>();
+		this.tickerID = null;
+		this.interval = null;
+		this.from = null;
+		this.to = null;
 	}
 
-	public ArrayList<HistoricalQuote> getHistoricalQuoteList()
+	public List<HistoricalQuote> getHistoricalQuoteList()
 	{
 		return historicalQuoteList;
 	}
 
-	public void setHistoricalQuoteList(ArrayList<HistoricalQuote> historicalQuoteList)
+	public void setHistoricalQuoteList(List<HistoricalQuote> historicalQuoteList)
 	{
 		this.historicalQuoteList = historicalQuoteList;
 	}

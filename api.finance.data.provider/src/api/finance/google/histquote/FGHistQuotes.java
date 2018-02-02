@@ -1,3 +1,26 @@
+/*
+ *  MIT License
+ *
+ * Copyright (c) 2018 mnemotron
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package api.finance.google.histquote;
 
 import java.io.IOException;
@@ -22,7 +45,6 @@ import org.apache.hc.core5.net.URIBuilder;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import api.core.http.HttpClient;
-import api.core.http.HttpGet;
 import api.core.http.Scheme;
 import api.finance.google.histquote.entity.FGHistoricalQuote;
 import api.finance.google.histquote.entity.FGHistoricalQuotes;
@@ -52,18 +74,17 @@ public class FGHistQuotes
 	private Calendar from;
 	private Calendar to;
 	private Scheme protocol;
-	private HttpGet httpGet;
 	private String tickerID;
 
 	/**
 	 * Default Constructor
 	 */
-	private FGHistQuotes()
+	private FGHistQuotes(String tickerID, Calendar from, Calendar to)
 	{
-		this.from = null;
-		this.to = null;
+		this.from = from;
+		this.to = to;
 		this.protocol = Scheme.HTTPS;
-		this.httpGet = new HttpGet();
+		this.tickerID = tickerID;
 	}
 
 	/**
@@ -74,12 +95,12 @@ public class FGHistQuotes
 	 * @param proxyPort
 	 *            The proxy port
 	 */
-	private FGHistQuotes(String proxyHostname, int proxyPort)
+	private FGHistQuotes(String proxyHostname, int proxyPort, String tickerID, Calendar from, Calendar to)
 	{
-		this.from = null;
-		this.to = null;
+		this.from = from;
+		this.to = to;
 		this.protocol = Scheme.HTTPS;
-		this.httpGet = new HttpGet(proxyHostname, proxyPort);
+		this.tickerID = tickerID;
 	}
 
 	/**
@@ -87,9 +108,9 @@ public class FGHistQuotes
 	 * 
 	 * @return Historical quotes instance
 	 */
-	public static FGHistQuotes FactoryGetInstance()
+	public static FGHistQuotes FactoryGetInstance(String tickerID, Calendar from, Calendar to)
 	{
-		FGHistQuotes locHistQuotes = new FGHistQuotes();
+		FGHistQuotes locHistQuotes = new FGHistQuotes(tickerID, from, to);
 
 		return locHistQuotes;
 	}
@@ -103,9 +124,9 @@ public class FGHistQuotes
 	 *            The proxy port
 	 * @return Historical quotes instance
 	 */
-	public static FGHistQuotes FactoryGetInstance(String proxyHostname, int proxyPort)
+	public static FGHistQuotes FactoryGetInstance(String proxyHostname, int proxyPort, String tickerID, Calendar from, Calendar to)
 	{
-		FGHistQuotes locHistQuotes = new FGHistQuotes(proxyHostname, proxyPort);
+		FGHistQuotes locHistQuotes = new FGHistQuotes(proxyHostname, proxyPort, tickerID, from, to);
 
 		return locHistQuotes;
 	}
@@ -146,19 +167,19 @@ public class FGHistQuotes
 	 */
 	private String getResponse() throws URISyntaxException, IOException
 	{
-		String locResponse = null;
+		String locResponse = new String();
 
-		HttpClient locHttpClient = new HttpClient();
+		HttpClient locHttpClient = HttpClient.FactoryGetInstance(this.buildURI());
 
-		locHttpClient.setUri(this.buildURI());
+		// send GET
 		locHttpClient.sendGet();
 
 		// return result
-		if (locHttpClient.getResponseHeader().getCode() == HttpStatus.SC_OK)
+		if (locHttpClient.getCode() == HttpStatus.SC_OK)
 		{
 			locResponse = locHttpClient.getResponse();
 		}
-		
+
 		return locResponse;
 	}
 
@@ -197,14 +218,12 @@ public class FGHistQuotes
 	 */
 	public FGHistoricalQuotes getResult() throws UnsupportedEncodingException, IOException, URISyntaxException
 	{
-		FGHistoricalQuotes locResHistQuotes = null;
+		FGHistoricalQuotes locResHistQuotes = new FGHistoricalQuotes();
 
-		// get response
 		String locResponse = this.getResponse();
 
-		if (locResponse != null && !locResponse.isEmpty())
+		if (!locResponse.isEmpty())
 		{
-			// parse response
 			locResHistQuotes = this.parseResponse(locResponse);
 		}
 
@@ -239,16 +258,6 @@ public class FGHistQuotes
 	public void setProtocol(Scheme protocol)
 	{
 		this.protocol = protocol;
-	}
-
-	public HttpGet getHttpGet()
-	{
-		return httpGet;
-	}
-
-	public void setHttpGet(HttpGet httpGet)
-	{
-		this.httpGet = httpGet;
 	}
 
 	public String getTickerID()

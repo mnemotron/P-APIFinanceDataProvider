@@ -1,8 +1,35 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 mnemotron
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package api.finance.google;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.List;
 
 import api.core.InterfaceDataProvider;
 import api.core.histquote.Interval;
@@ -32,7 +59,7 @@ public class APIFinanceGoogle implements InterfaceDataProvider
 	public Tickers searchTicker(String query) throws Exception
 	{
 		Tickers locTickers = new Tickers();
-		ArrayList<Ticker> locTickerList = new ArrayList<Ticker>();
+		List<Ticker> locTickerList = new ArrayList<Ticker>();
 
 		// call API
 		FGSymbolLookup locSL = FGSymbolLookup.FactoryGetInstance();
@@ -42,36 +69,30 @@ public class APIFinanceGoogle implements InterfaceDataProvider
 		FGResSymbolLookup locFGResSymbolLookup = locSL.getResult();
 
 		// map to result
-		if (locFGResSymbolLookup != null)
+		List<FGSymbol> locFGSymbolList = locFGResSymbolLookup.getMatches();
+
+		locTickers.setQuery(query);
+
+		Iterator<FGSymbol> locIterator = locFGSymbolList.iterator();
+
+		while (locIterator.hasNext())
 		{
-			ArrayList<FGSymbol> locFGSymbolList = locFGResSymbolLookup.getMatches();
+			Ticker locTicker = new Ticker();
 
-			locTickers.setQuery(query);
+			FGSymbol locFGSymbol = locIterator.next();
 
-			if (locFGSymbolList != null)
+			if (locFGSymbol == null)
 			{
-				Iterator<FGSymbol> locIterator = locFGSymbolList.iterator();
-
-				while (locIterator.hasNext())
-				{
-					Ticker locTicker = new Ticker();
-
-					FGSymbol locFGSymbol = locIterator.next();
-
-					if (locFGSymbol == null)
-					{
-						continue;
-					}
-
-					locTicker.setTickerID(locFGSymbol.getT());
-					locTicker.setTickerName(locFGSymbol.getN());
-
-					locTickerList.add(locTicker);
-				}
-
-				locTickers.setTickerList(locTickerList);
+				continue;
 			}
+
+			locTicker.setTickerID(locFGSymbol.getT());
+			locTicker.setTickerName(locFGSymbol.getN());
+
+			locTickerList.add(locTicker);
 		}
+
+		locTickers.setTickerList(locTickerList);
 
 		return locTickers;
 	}
@@ -83,17 +104,15 @@ public class APIFinanceGoogle implements InterfaceDataProvider
 	}
 
 	@Override
-	public HistoricalQuotes getHistoricalQuotes(String tickerID, Calendar from, Calendar to, Interval interval) throws Exception
+	public HistoricalQuotes getHistoricalQuotes(String tickerID, Calendar from, Calendar to, Interval interval) throws UnsupportedEncodingException, IOException, URISyntaxException
 	{
 
 		HistoricalQuotes locHistoricalQuotes = new HistoricalQuotes();
 		ArrayList<HistoricalQuote> locHistoricalQuoteList = new ArrayList<HistoricalQuote>();
 
-		FGHistQuotes locHistQuotes = FGHistQuotes.FactoryGetInstance();
+		FGHistQuotes locHistQuotes = FGHistQuotes.FactoryGetInstance(tickerID, from, to);
 
 		locHistQuotes.setTickerID(tickerID);
-		locHistQuotes.setFrom(from);
-		locHistQuotes.setTo(to);
 
 		FGHistoricalQuotes locResHistQuotes = locHistQuotes.getResult();
 
