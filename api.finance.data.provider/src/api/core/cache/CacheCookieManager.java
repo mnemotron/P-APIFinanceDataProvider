@@ -23,7 +23,7 @@ public class CacheCookieManager
 
 	private static final String PATH_CACHE = "./";
 	private static final String CACHE_ID_COOKIE = "cacheCookie";
-	private static final long CACHE_EXPIRY_DURATION_DAYS = '7';
+	private static final long CACHE_EXPIRY_DURATION_HOUR = '1';
 
 	private PersistentCacheManager persistentCacheManager;
 	private Cache<String, CacheCookieStore> cache;
@@ -35,7 +35,7 @@ public class CacheCookieManager
 						// .heap(10, EntryUnit.ENTRIES)
 						// .offheap(1, MemoryUnit.MB)
 						.disk(20, MemoryUnit.MB, true))
-						.withExpiry(Expirations.timeToLiveExpiration(Duration.of(CACHE_EXPIRY_DURATION_DAYS, TimeUnit.DAYS))))
+						.withExpiry(Expirations.timeToLiveExpiration(Duration.of(CACHE_EXPIRY_DURATION_HOUR, TimeUnit.HOURS))))
 						.build(true);
 
 		this.loadCache(CACHE_ID_COOKIE);
