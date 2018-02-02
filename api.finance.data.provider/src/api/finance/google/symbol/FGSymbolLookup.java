@@ -5,18 +5,15 @@ import java.net.URI;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
-import org.apache.hc.client5.http.cookie.Cookie;
 import org.apache.hc.client5.http.cookie.CookieStore;
+import org.apache.hc.core5.http.HttpStatus;
 import org.apache.hc.core5.net.URIBuilder;
 
-import api.core.cache.CacheCookieStore;
 import api.core.cache.CacheCookieManager;
 import api.core.http.HttpClient;
 import api.core.http.HttpGet;
 import api.core.http.Scheme;
 import api.finance.google.symbol.entity.FGResSymbolLookup;
-
-import java.util.List;
 
 /**
  * Google Finance Symbol Lookup
@@ -149,6 +146,7 @@ public class FGSymbolLookup
 	private String getResponse() throws Exception
 	{
 		HttpClient locHttpClient = new HttpClient();
+		String locResponse = null;
 
 		if (!this.cacheCookieManager.isCacheValid(FGSymbolLookup.CACHE_KEY_COOKIE))
 		{
@@ -159,14 +157,14 @@ public class FGSymbolLookup
 			CookieStore locCookieStore = locHttpClient.getCookieStore();
 
 			this.cacheCookieManager.addToCacheFromCookieStore(FGSymbolLookup.CACHE_KEY_COOKIE, locCookieStore);
-			this.cacheCookieManager.clode();
+			this.cacheCookieManager.close();
 		}
 		else
 		{
 			// P3P cookie from cache
 			CookieStore locCookieStore = this.cacheCookieManager.getFromCacheCookieStore(FGSymbolLookup.CACHE_KEY_COOKIE);
-			this.cacheCookieManager.clode();
-			
+			this.cacheCookieManager.close();
+
 			locHttpClient.setCookieStore(locCookieStore);
 		}
 
@@ -174,7 +172,13 @@ public class FGSymbolLookup
 		locHttpClient.setUri(this.buildURI());
 		locHttpClient.sendGet();
 
-		return locHttpClient.getResponse();
+		// return result
+		if (locHttpClient.getResponseHeader().getCode() == HttpStatus.SC_OK)
+		{
+			locResponse = locHttpClient.getResponse();
+		}
+
+		return locResponse;
 	}
 
 	/**
@@ -202,13 +206,16 @@ public class FGSymbolLookup
 	 */
 	public FGResSymbolLookup getResult() throws Exception
 	{
-		FGResSymbolLookup locFGResSymbolLookup;
+		FGResSymbolLookup locFGResSymbolLookup = null;
 
 		// get response
 		String locResponse = this.getResponse();
 
 		// parse response
-		locFGResSymbolLookup = this.parseResponse(locResponse);
+		if (locResponse != null)
+		{
+			locFGResSymbolLookup = this.parseResponse(locResponse);
+		}
 
 		return locFGResSymbolLookup;
 	}

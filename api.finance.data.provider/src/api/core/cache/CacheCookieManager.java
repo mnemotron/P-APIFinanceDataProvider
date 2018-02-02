@@ -3,6 +3,7 @@ package api.core.cache;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.hc.client5.http.cookie.BasicCookieStore;
 import org.apache.hc.client5.http.cookie.Cookie;
@@ -14,12 +15,15 @@ import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.config.units.MemoryUnit;
+import org.ehcache.expiry.Duration;
+import org.ehcache.expiry.Expirations;
 
 public class CacheCookieManager
 {
 
 	private static final String PATH_CACHE = "./";
 	private static final String CACHE_ID_COOKIE = "cacheCookie";
+	private static final long CACHE_EXPIRY_DURATION_DAYS = '7';
 
 	private PersistentCacheManager persistentCacheManager;
 	private Cache<String, CacheCookieStore> cache;
@@ -30,17 +34,11 @@ public class CacheCookieManager
 				CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, CacheCookieStore.class, ResourcePoolsBuilder.newResourcePoolsBuilder()
 						// .heap(10, EntryUnit.ENTRIES)
 						// .offheap(1, MemoryUnit.MB)
-						.disk(20, MemoryUnit.MB, true))).build(true);
+						.disk(20, MemoryUnit.MB, true))
+						.withExpiry(Expirations.timeToLiveExpiration(Duration.of(CACHE_EXPIRY_DURATION_DAYS, TimeUnit.DAYS))))
+						.build(true);
 
 		this.loadCache(CACHE_ID_COOKIE);
-
-		// CacheConfiguration<Long, String> cacheConfiguration =
-		// CacheConfigurationBuilder.newCacheConfigurationBuilder(Long.class,
-		// String.class,
-		// ResourcePoolsBuilder.heap(100))
-		// .withExpiry(Expirations.timeToLiveExpiration(Duration.of(20,
-		// TimeUnit.SECONDS)))
-		// .build();
 	}
 
 	public void addToCacheFromCookieStore(String key, CookieStore cookieStore)
@@ -130,7 +128,7 @@ public class CacheCookieManager
 		return locResult;
 	}
 
-	public void clode()
+	public void close()
 	{
 		this.persistentCacheManager.close();
 	}

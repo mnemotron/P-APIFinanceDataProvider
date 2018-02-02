@@ -5,8 +5,8 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -16,10 +16,12 @@ import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.BOMInputStream;
+import org.apache.hc.core5.http.HttpStatus;
 import org.apache.hc.core5.net.URIBuilder;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 
+import api.core.http.HttpClient;
 import api.core.http.HttpGet;
 import api.core.http.Scheme;
 import api.finance.google.histquote.entity.FGHistoricalQuote;
@@ -112,10 +114,10 @@ public class FGHistQuotes
 	 * Builds the URL
 	 * 
 	 * @return URL
-	 * @throws URISyntaxException 
-	 * @throws MalformedURLException 
+	 * @throws URISyntaxException
+	 * @throws MalformedURLException
 	 */
-	private URL buildURL() throws MalformedURLException, URISyntaxException
+	private URI buildURI() throws MalformedURLException, URISyntaxException
 	{
 		URIBuilder locURIBuilder = new URIBuilder();
 		locURIBuilder.setScheme(this.protocol.getScheme());
@@ -132,30 +134,31 @@ public class FGHistQuotes
 		locURIBuilder.addParameter(FGHistQuotes.QUERY_END_DATE, locEndDate);
 		locURIBuilder.addParameter(FGHistQuotes.QUERY_OUTPUT, VALUE_OUTPUT_CSV);
 
-		return locURIBuilder.build().toURL();
+		return locURIBuilder.build();
 	}
 
 	/**
 	 * Submits the historical quote request and returns the CSV result.
 	 * 
 	 * @return CSV
-	 * @throws URISyntaxException 
-	 * @throws MalformedURLException 
+	 * @throws URISyntaxException
+	 * @throws IOException
 	 */
-	private String getResponse() throws MalformedURLException, URISyntaxException
+	private String getResponse() throws URISyntaxException, IOException
 	{
-		String locResponse = new String();
+		String locResponse = null;
 
-		this.httpGet.setUrl(this.buildURL());
+		HttpClient locHttpClient = new HttpClient();
 
-		try {
-			this.httpGet.sendGet();
-			
-			locResponse = this.httpGet.getResponse();
-		} catch (IOException e) {
-			
+		locHttpClient.setUri(this.buildURI());
+		locHttpClient.sendGet();
+
+		// return result
+		if (locHttpClient.getResponseHeader().getCode() == HttpStatus.SC_OK)
+		{
+			locResponse = locHttpClient.getResponse();
 		}
-	
+		
 		return locResponse;
 	}
 
@@ -164,25 +167,21 @@ public class FGHistQuotes
 	 * 
 	 * @param CSV
 	 * @return Historical quote response object
-	 * @throws IOException 
-	 * @throws UnsupportedEncodingException 
+	 * @throws IOException
+	 * @throws UnsupportedEncodingException
 	 */
 	private FGHistoricalQuotes parseResponse(String response) throws UnsupportedEncodingException, IOException
 	{
 		FGHistoricalQuotes locResHistQuotes = new FGHistoricalQuotes();
-		
-	    InputStreamReader locReaderBOM = new InputStreamReader(new BOMInputStream(IOUtils.toInputStream(response, StandardCharsets.UTF_8.name())), StandardCharsets.UTF_8.name());
-		
+
+		InputStreamReader locReaderBOM = new InputStreamReader(new BOMInputStream(IOUtils.toInputStream(response, StandardCharsets.UTF_8.name())), StandardCharsets.UTF_8.name());
+
 		String locResponseWithoutBOM = IOUtils.toString(locReaderBOM);
-		
+
 		locReaderBOM.close();
-		
-		List<FGHistoricalQuote> locHistQuoteList = 
-				new CsvToBeanBuilder<FGHistoricalQuote>(new StringReader(locResponseWithoutBOM))
-						.withType(FGHistoricalQuote.class)
-						.build()
-						.parse();
-		
+
+		List<FGHistoricalQuote> locHistQuoteList = new CsvToBeanBuilder<FGHistoricalQuote>(new StringReader(locResponseWithoutBOM)).withType(FGHistoricalQuote.class).build().parse();
+
 		locResHistQuotes.setHistQuoteList(new ArrayList<FGHistoricalQuote>(locHistQuoteList));
 
 		return locResHistQuotes;
@@ -192,18 +191,18 @@ public class FGHistQuotes
 	 * Get result
 	 * 
 	 * @return Historical quote response object
-	 * @throws IOException 
-	 * @throws UnsupportedEncodingException 
-	 * @throws URISyntaxException 
+	 * @throws IOException
+	 * @throws UnsupportedEncodingException
+	 * @throws URISyntaxException
 	 */
 	public FGHistoricalQuotes getResult() throws UnsupportedEncodingException, IOException, URISyntaxException
 	{
-		FGHistoricalQuotes locResHistQuotes = new FGHistoricalQuotes();
+		FGHistoricalQuotes locResHistQuotes = null;
 
 		// get response
 		String locResponse = this.getResponse();
-		
-		if (!locResponse.isEmpty())
+
+		if (locResponse != null && !locResponse.isEmpty())
 		{
 			// parse response
 			locResHistQuotes = this.parseResponse(locResponse);

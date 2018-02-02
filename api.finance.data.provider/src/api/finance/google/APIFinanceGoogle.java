@@ -1,6 +1,5 @@
 package api.finance.google;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -30,7 +29,7 @@ public class APIFinanceGoogle implements InterfaceDataProvider
 {
 
 	@Override
-	public Tickers searchTicker(String query) throws Exception 
+	public Tickers searchTicker(String query) throws Exception
 	{
 		Tickers locTickers = new Tickers();
 		ArrayList<Ticker> locTickerList = new ArrayList<Ticker>();
@@ -43,30 +42,36 @@ public class APIFinanceGoogle implements InterfaceDataProvider
 		FGResSymbolLookup locFGResSymbolLookup = locSL.getResult();
 
 		// map to result
-		ArrayList<FGSymbol> locFGSymbolList = locFGResSymbolLookup.getMatches();
-
-		locTickers.setQuery(query);
-
-		Iterator<FGSymbol> locIterator = locFGSymbolList.iterator();
-
-		while (locIterator.hasNext())
+		if (locFGResSymbolLookup != null)
 		{
-			Ticker locTicker = new Ticker();
+			ArrayList<FGSymbol> locFGSymbolList = locFGResSymbolLookup.getMatches();
 
-			FGSymbol locFGSymbol = locIterator.next();
+			locTickers.setQuery(query);
 
-			if (locFGSymbol == null)
+			if (locFGSymbolList != null)
 			{
-				continue;
+				Iterator<FGSymbol> locIterator = locFGSymbolList.iterator();
+
+				while (locIterator.hasNext())
+				{
+					Ticker locTicker = new Ticker();
+
+					FGSymbol locFGSymbol = locIterator.next();
+
+					if (locFGSymbol == null)
+					{
+						continue;
+					}
+
+					locTicker.setTickerID(locFGSymbol.getT());
+					locTicker.setTickerName(locFGSymbol.getN());
+
+					locTickerList.add(locTicker);
+				}
+
+				locTickers.setTickerList(locTickerList);
 			}
-
-			locTicker.setTickerID(locFGSymbol.getT());
-			locTicker.setTickerName(locFGSymbol.getN());
-
-			locTickerList.add(locTicker);
 		}
-
-		locTickers.setTickerList(locTickerList);
 
 		return locTickers;
 	}
@@ -83,7 +88,6 @@ public class APIFinanceGoogle implements InterfaceDataProvider
 
 		HistoricalQuotes locHistoricalQuotes = new HistoricalQuotes();
 		ArrayList<HistoricalQuote> locHistoricalQuoteList = new ArrayList<HistoricalQuote>();
-		SimpleDateFormat locDateFormatter = new SimpleDateFormat("dd-MMM-yy");
 
 		FGHistQuotes locHistQuotes = FGHistQuotes.FactoryGetInstance();
 
@@ -93,47 +97,50 @@ public class APIFinanceGoogle implements InterfaceDataProvider
 
 		FGHistoricalQuotes locResHistQuotes = locHistQuotes.getResult();
 
-		// map to result
-		locHistoricalQuotes.setTickerID(locResHistQuotes.getTickerID());
-
-		ArrayList<FGHistoricalQuote> locHistQuote = locResHistQuotes.getHistQuoteList();
-
-		for (FGHistoricalQuote histQuote : locHistQuote)
+		if (locResHistQuotes != null)
 		{
-			HistoricalQuote locHistoricalQuote = new HistoricalQuote();
-			Calendar locCalendar = null;
+			// map to result
+			locHistoricalQuotes.setTickerID(locResHistQuotes.getTickerID());
 
-			if (histQuote.getDate() != null)
+			ArrayList<FGHistoricalQuote> locHistQuote = locResHistQuotes.getHistQuoteList();
+
+			for (FGHistoricalQuote histQuote : locHistQuote)
 			{
-				try
-				{
-					// Date locDate =
-					// locDateFormatter.parse(histQuote.getDate());
-					locCalendar = Calendar.getInstance();
-					// locCalendar.setTime(locDate);
-					locCalendar.setTime(histQuote.getDate());
+				HistoricalQuote locHistoricalQuote = new HistoricalQuote();
+				Calendar locCalendar = null;
 
-				}
-				catch (Exception e)
+				if (histQuote.getDate() != null)
 				{
+					try
+					{
+						// Date locDate =
+						// locDateFormatter.parse(histQuote.getDate());
+						locCalendar = Calendar.getInstance();
+						// locCalendar.setTime(locDate);
+						locCalendar.setTime(histQuote.getDate());
 
+					}
+					catch (Exception e)
+					{
+
+					}
 				}
+
+				locHistoricalQuote.setDate(locCalendar);
+				locHistoricalQuote.setOpen(histQuote.getOpen());
+				locHistoricalQuote.setHigh(histQuote.getHigh());
+				locHistoricalQuote.setLow(histQuote.getLow());
+				locHistoricalQuote.setClose(histQuote.getClose());
+				locHistoricalQuote.setVolume(histQuote.getVolume());
+
+				locHistoricalQuoteList.add(locHistoricalQuote);
 			}
 
-			locHistoricalQuote.setDate(locCalendar);
-			locHistoricalQuote.setOpen(histQuote.getOpen());
-			locHistoricalQuote.setHigh(histQuote.getHigh());
-			locHistoricalQuote.setLow(histQuote.getLow());
-			locHistoricalQuote.setClose(histQuote.getClose());
-			locHistoricalQuote.setVolume(histQuote.getVolume());
-
-			locHistoricalQuoteList.add(locHistoricalQuote);
+			locHistoricalQuotes.setTickerID(tickerID);
+			locHistoricalQuotes.setFrom(from);
+			locHistoricalQuotes.setTo(to);
+			locHistoricalQuotes.setHistoricalQuoteList(locHistoricalQuoteList);
 		}
-
-		locHistoricalQuotes.setTickerID(tickerID);
-		locHistoricalQuotes.setFrom(from);
-		locHistoricalQuotes.setTo(to);
-		locHistoricalQuotes.setHistoricalQuoteList(locHistoricalQuoteList);
 
 		return locHistoricalQuotes;
 	}
