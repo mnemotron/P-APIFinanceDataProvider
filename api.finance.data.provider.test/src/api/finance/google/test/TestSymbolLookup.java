@@ -23,5 +23,4 @@ public class TestSymbolLookup
 			e.printStackTrace();
 		}
 	}
-
 }
