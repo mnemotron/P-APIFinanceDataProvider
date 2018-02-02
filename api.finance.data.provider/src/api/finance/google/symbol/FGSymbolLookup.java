@@ -1,6 +1,5 @@
 package api.finance.google.symbol;
 
-import java.io.File;
 import java.net.URI;
 
 import javax.json.bind.Jsonb;
@@ -11,7 +10,7 @@ import org.apache.hc.client5.http.cookie.CookieStore;
 import org.apache.hc.core5.net.URIBuilder;
 
 import api.core.cache.CacheCookieStore;
-import api.core.cache.CacheManager;
+import api.core.cache.CacheCookieManager;
 import api.core.http.HttpClient;
 import api.core.http.HttpGet;
 import api.core.http.Scheme;
@@ -22,13 +21,14 @@ import java.util.List;
 /**
  * Google Finance Symbol Lookup
  * 
- * For example: 
+ * For example:
  * 
- * 1. 	Request to get the P3P Cookie: URL <https://finance.google.com/finance>
- * 		Response: P3P Cookie
+ * 1. Request to get the P3P Cookie: URL <https://finance.google.com/finance>
+ * Response: P3P Cookie
  * 
- * 2. 	Request: URL <https://finance.google.com/finance/match?matchtype=matchall&q=google>
- * 		Response: JSON (equal to the symbol lookup entities)
+ * 2. Request: URL
+ * <https://finance.google.com/finance/match?matchtype=matchall&q=google>
+ * Response: JSON (equal to the symbol lookup entities)
  * 
  * @author mnemotron
  * @version 1.1.0
@@ -42,13 +42,12 @@ public class FGSymbolLookup
 	private static final String QUERY_MATCHTYPE = "matchtype";
 	private static final String QUERY_STRING = "q";
 	private static final String VALUE_MATCHTYPE = "matchall";
-	
-	private static final String CACHE_ID_COOKIE = "cacheCookie";
+
 	private static final String CACHE_KEY_COOKIE = "P3P";
 
 	private HttpGet httpGet;
 	private String query;
-	private CacheManager cacheManager;
+	private CacheCookieManager cacheCookieManager;
 
 	/**
 	 * HTTP Protocol
@@ -63,15 +62,17 @@ public class FGSymbolLookup
 		this.query = new String();
 		this.protocol = Scheme.HTTPS;
 		this.httpGet = new HttpGet();
-		
-		this.cacheManager = new CacheManager(FGSymbolLookup.CACHE_ID_COOKIE);
+
+		this.cacheCookieManager = new CacheCookieManager();
 	}
 
 	/**
 	 * Constructor
 	 * 
-	 * @param proxyHostname The proxy hostname
-	 * @param proxyPort The proxy port
+	 * @param proxyHostname
+	 *            The proxy hostname
+	 * @param proxyPort
+	 *            The proxy port
 	 */
 	private FGSymbolLookup(String proxyHostname, int proxyPort)
 	{
@@ -79,8 +80,8 @@ public class FGSymbolLookup
 		this.protocol = Scheme.HTTPS;
 
 		this.httpGet = new HttpGet(proxyHostname, proxyPort);
-		
-		this.cacheManager = new CacheManager(FGSymbolLookup.CACHE_ID_COOKIE);
+
+		this.cacheCookieManager = new CacheCookieManager();
 	}
 
 	/**
@@ -98,8 +99,10 @@ public class FGSymbolLookup
 	/**
 	 * Factory
 	 * 
-	 * @param proxyHostname The proxy hostname
-	 * @param proxyPort The proxy port
+	 * @param proxyHostname
+	 *            The proxy hostname
+	 * @param proxyPort
+	 *            The proxy port
 	 * @return Symbol lookup instance
 	 */
 	public static FGSymbolLookup FactoryGetInstance(String proxyHostname, int proxyPort)
@@ -108,7 +111,7 @@ public class FGSymbolLookup
 
 		return locSymbolLookup;
 	}
-	
+
 	/**
 	 * Builds the symbol lookup URL
 	 * 
@@ -126,7 +129,7 @@ public class FGSymbolLookup
 
 		return locURIBuilder.build();
 	}
-	
+
 	private URI buildURIP3PCookie() throws Exception
 	{
 		URIBuilder locURIBuilder = new URIBuilder();
@@ -136,7 +139,7 @@ public class FGSymbolLookup
 
 		return locURIBuilder.build();
 	}
-	
+
 	/**
 	 * Submits the symbol lookup request and returns the JSON result.
 	 * 
@@ -144,38 +147,43 @@ public class FGSymbolLookup
 	 * @throws Exception
 	 */
 	private String getResponse() throws Exception
-	{	
+	{
 		HttpClient locHttpClient = new HttpClient();
 
-		if (!this.cacheManager.isCacheValid(FGSymbolLookup.CACHE_KEY_COOKIE))
+		if (!this.cacheCookieManager.isCacheValid(FGSymbolLookup.CACHE_KEY_COOKIE))
 		{
-			//P3P cookie request
+			// P3P cookie request
 			locHttpClient.setUri(this.buildURIP3PCookie());
 			locHttpClient.sendGet();
-		
+
 			CookieStore locCookieStore = locHttpClient.getCookieStore();
-			
-			this.cacheManager.addToCache(FGSymbolLookup.CACHE_KEY_COOKIE, new CacheCookieStore());
+
+			this.cacheCookieManager.addToCacheFromCookieStore(FGSymbolLookup.CACHE_KEY_COOKIE, locCookieStore);
+			this.cacheCookieManager.clode();
 		}
 		else
 		{
-			//P3P cookie from cache
-			List<Cookie> locCookieList = (List<Cookie>) this.cacheManager.getFromCache(FGSymbolLookup.CACHE_KEY_COOKIE);
+			// P3P cookie from cache
+			CookieStore locCookieStore = this.cacheCookieManager.getFromCacheCookieStore(FGSymbolLookup.CACHE_KEY_COOKIE);
+			this.cacheCookieManager.clode();
 			
+			locHttpClient.setCookieStore(locCookieStore);
 		}
-		
+
 		// symbol lookup request with cookies
 		locHttpClient.setUri(this.buildURI());
 		locHttpClient.sendGet();
-		
+
 		return locHttpClient.getResponse();
 	}
-	
+
 	/**
 	 * Parses and binds the symbol lookup JSON response by JSON-B.
 	 * 
-	 * @param response Google Finance JSON response
-	 * @return Symbol lookup response object (equal to Google Finance JSON result)
+	 * @param response
+	 *            Google Finance JSON response
+	 * @return Symbol lookup response object (equal to Google Finance JSON
+	 *         result)
 	 */
 	private FGResSymbolLookup parseResponse(String response)
 	{
@@ -185,7 +193,7 @@ public class FGSymbolLookup
 
 		return locFGResSymbolLookup;
 	}
-	
+
 	/**
 	 * Get result
 	 * 
@@ -204,7 +212,7 @@ public class FGSymbolLookup
 
 		return locFGResSymbolLookup;
 	}
-	
+
 	public HttpGet getHttpGet()
 	{
 		return httpGet;
@@ -229,7 +237,7 @@ public class FGSymbolLookup
 	{
 		this.protocol = protocol;
 	}
-	
+
 	/**
 	 * Get search string
 	 * 
@@ -243,7 +251,8 @@ public class FGSymbolLookup
 	/**
 	 * Set search string
 	 * 
-	 * @param query Search string
+	 * @param query
+	 *            Search string
 	 */
 	public void setQuery(String query)
 	{

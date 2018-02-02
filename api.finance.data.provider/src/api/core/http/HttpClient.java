@@ -37,14 +37,11 @@ public class HttpClient
 	{
 		int intValueOfChar;
 		HttpClientContext locContext = HttpClientContext.create();
+		
+		this.response = new String();
 
 		CloseableHttpClient locClient = HttpClients.createDefault();
 		HttpGet locRequest = new HttpGet(this.uri);
-
-		// add cookies
-		// CookieStore locCookieStore = new BasicCookieStore();
-		// BasicClientCookie locCookie = new BasicClientCookie();
-		// locCookieStore.addCookie(locCookie);
 
 		locContext.setAttribute(HttpClientContext.COOKIE_STORE, this.cookieStore);
 
