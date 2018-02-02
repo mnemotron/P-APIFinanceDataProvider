@@ -23,59 +23,35 @@
  */
 package api.finance.yahoo.symbol.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Result Set
+ * Response Symbol Lookup
  * 
  * @author mnemotron
  * @version 1.0.0
  * @since 2018-01-01
  */
-public class ResultSet
+public class FYBeanSymbolLookup
 {
-	private String query;
-	private List<Symbol> result;
+	private ResultSet resultset;
 
-	public ResultSet()
+	public FYBeanSymbolLookup()
 	{
-		this.query = new String();
-		this.result = new ArrayList<Symbol>();
+		this.resultset = new ResultSet();
 	}
 
-	public String getQuery()
+	public ResultSet getResultset()
 	{
-		return query;
+		return resultset;
 	}
 
-	public void setQuery(String query)
+	public void setResultset(ResultSet resultset)
 	{
-		this.query = query;
-	}
-
-	public List<Symbol> getResult()
-	{
-		return result;
-	}
-
-	public void setResult(List<Symbol> result)
-	{
-		this.result = result;
+		this.resultset = resultset;
 	}
 
 	public String toString()
 	{
-		StringBuilder locStringBuilder = new StringBuilder();
-
-		locStringBuilder.append("query:" + this.getQuery() + "\n");
-
-		for (Symbol symbol : result)
-		{
-			locStringBuilder.append(symbol.toString() + "\n");
-		}
-
-		return locStringBuilder.toString();
+		return this.resultset.toString();
 	}
 
 }

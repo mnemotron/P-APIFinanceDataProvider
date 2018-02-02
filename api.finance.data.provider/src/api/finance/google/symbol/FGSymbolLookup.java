@@ -97,7 +97,7 @@ public class FGSymbolLookup
 	/**
 	 * Builds the symbol lookup URL
 	 * 
-	 * @return URL
+	 * @return URI
 	 * @throws Exception
 	 */
 	private URI buildURI() throws Exception

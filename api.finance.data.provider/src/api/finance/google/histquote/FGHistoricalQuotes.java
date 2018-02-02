@@ -134,7 +134,7 @@ public class FGHistoricalQuotes
 	/**
 	 * Builds the URL
 	 * 
-	 * @return URL
+	 * @return URI
 	 * @throws URISyntaxException
 	 * @throws MalformedURLException
 	 */

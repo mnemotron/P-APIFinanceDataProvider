@@ -1,21 +1,46 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2018 mnemotron
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package api.finance.yahoo.symbol;
 
-import java.net.URL;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
 
 import org.apache.hc.core5.net.URIBuilder;
 
-import api.core.http.HttpGet;
+import api.core.http.HttpClient;
 import api.core.http.Scheme;
-import api.finance.yahoo.symbol.entity.FYResSymbolLookup;
+import api.finance.yahoo.symbol.entity.FYBeanSymbolLookup;
 
 /**
  * Yahoo Finance Symbol Lookup
  * 
- * For example: 
- * Request: URL <https://autoc.finance.yahoo.com/autoc?query=bmw&region=EU&lang=en-GB>
+ * For example: Request: URL
+ * <https://autoc.finance.yahoo.com/autoc?query=bmw&region=EU&lang=en-GB>
  * Response: JSON (equal to the symbol lookup entities)
  * 
  * Alternative (not implemented): Request: URL
@@ -33,7 +58,9 @@ public class FYSymbolLookup
 	private static final String QUERY_REGION = "region";
 	private static final String QUERY_LANGUAGE = "lang";
 
-	private HttpGet httpGet;
+	/**
+	 * Query string
+	 */
 	private String query;
 
 	/**
@@ -60,7 +87,6 @@ public class FYSymbolLookup
 		this.region = new String();
 		this.language = new String();
 		this.protocol = Scheme.HTTPS;
-		this.httpGet = new HttpGet();
 	}
 
 	/**
@@ -77,8 +103,6 @@ public class FYSymbolLookup
 		this.region = new String();
 		this.language = new String();
 		this.protocol = Scheme.HTTPS;
-
-		this.httpGet = new HttpGet(proxyHostname, proxyPort);
 	}
 
 	/**
@@ -112,10 +136,11 @@ public class FYSymbolLookup
 	/**
 	 * Builds the symbol lookup URL
 	 * 
-	 * @return URL
+	 * @return URI
+	 * @throws URISyntaxException
 	 * @throws Exception
 	 */
-	private URL buildURL() throws Exception
+	private URI buildURI() throws URISyntaxException
 	{
 		URIBuilder locURIBuilder = new URIBuilder();
 		locURIBuilder.setScheme(this.protocol.getScheme());
@@ -125,23 +150,25 @@ public class FYSymbolLookup
 		locURIBuilder.addParameter(FYSymbolLookup.QUERY_REGION, this.region);
 		locURIBuilder.addParameter(FYSymbolLookup.QUERY_LANGUAGE, this.language);
 
-		return locURIBuilder.build().toURL();
+		return locURIBuilder.build();
 	}
 
 	/**
 	 * Submits the symbol lookup request and returns the JSON result.
 	 * 
 	 * @return Yahoo Finance JSON response
-	 * @throws Exception
+	 * @throws URISyntaxException
+	 * @throws IOException
 	 */
-	private String getResponse() throws Exception
+	private String getResponse() throws URISyntaxException, IOException
 	{
-		String locResponse = null;
+		String locResponse = new String();
 
-		this.httpGet.setUrl(this.buildURL());
+		HttpClient locHttpClient = HttpClient.FactoryGetInstance(this.buildURI());
 
-		this.httpGet.sendGet();
-		locResponse = this.httpGet.getResponse();
+		locHttpClient.sendGet();
+
+		locResponse = locHttpClient.getResponse();
 
 		return locResponse;
 	}
@@ -149,14 +176,25 @@ public class FYSymbolLookup
 	/**
 	 * Parses and binds the symbol lookup JSON response by JSON-B.
 	 * 
-	 * @param response Yahoo Finance JSON response
-	 * @return Symbol lookup response object (equal to Yahoo Finance JSON result)
+	 * @param response
+	 *            Yahoo Finance JSON response
+	 * @return Symbol lookup response object (equal to Yahoo Finance JSON
+	 *         result)
 	 */
-	private FYResSymbolLookup parseResponse(String response)
+	private FYBeanSymbolLookup parseResponse(String response)
 	{
-		Jsonb jsonb = JsonbBuilder.create();
+		FYBeanSymbolLookup locResSymbolLookup = new FYBeanSymbolLookup();
 
-		FYResSymbolLookup locResSymbolLookup = jsonb.fromJson(response, FYResSymbolLookup.class);
+		try
+		{
+			Jsonb jsonb = JsonbBuilder.create();
+
+			locResSymbolLookup = jsonb.fromJson(response, FYBeanSymbolLookup.class);
+		}
+		catch (Exception e)
+		{
+			//return empty object, if the parsing fails
+		}
 
 		return locResSymbolLookup;
 	}
@@ -167,17 +205,17 @@ public class FYSymbolLookup
 	 * @return Symbol lookup response object
 	 * @throws Exception
 	 */
-	public FYResSymbolLookup getResult() throws Exception
+	public FYBeanSymbolLookup getResult() throws Exception
 	{
-		FYResSymbolLookup locResSymbolLookup;
+		FYBeanSymbolLookup locSymbolLookup = new FYBeanSymbolLookup();
 
 		// get response
 		String locResponse = this.getResponse();
 
 		// parse response
-		locResSymbolLookup = this.parseResponse(locResponse);
+		locSymbolLookup = this.parseResponse(locResponse);
 
-		return locResSymbolLookup;
+		return locSymbolLookup;
 	}
 
 	/**
@@ -193,7 +231,8 @@ public class FYSymbolLookup
 	/**
 	 * Set search string
 	 * 
-	 * @param query Search string
+	 * @param query
+	 *            Search string
 	 */
 	public void setQuery(String query)
 	{
@@ -213,7 +252,8 @@ public class FYSymbolLookup
 	/**
 	 * Set region For example: EU
 	 * 
-	 * @param region Region
+	 * @param region
+	 *            Region
 	 */
 	public void setRegion(String region)
 	{
@@ -233,21 +273,12 @@ public class FYSymbolLookup
 	/**
 	 * Set language For example: de-DE, en-GB
 	 * 
-	 * @param language Language
+	 * @param language
+	 *            Language
 	 */
 	public void setLanguage(String language)
 	{
 		this.language = language;
-	}
-
-	public HttpGet getHttpGet()
-	{
-		return httpGet;
-	}
-
-	public void setHttpGet(HttpGet httpGet)
-	{
-		this.httpGet = httpGet;
 	}
 
 	public Scheme getProtocol()
