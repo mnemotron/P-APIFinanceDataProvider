@@ -46,8 +46,8 @@ import com.opencsv.bean.CsvToBeanBuilder;
 
 import api.core.http.HttpClient;
 import api.core.http.Scheme;
-import api.finance.google.histquote.entity.FGHistoricalQuote;
-import api.finance.google.histquote.entity.FGHistoricalQuotes;
+import api.finance.google.histquote.entity.FGBeanHistoricalQuote;
+import api.finance.google.histquote.entity.FGBeanHistoricalQuotes;
 
 /**
  * Google Finance Historical Quotes
@@ -60,7 +60,7 @@ import api.finance.google.histquote.entity.FGHistoricalQuotes;
  * @version 1.1.0
  * @since 2018-01-22
  */
-public class FGHistQuotes
+public class FGHistoricalQuotes
 {
 
 	private static final String HOST_SYMBOL_LOOKUP = "finance.google.com";
@@ -79,7 +79,7 @@ public class FGHistQuotes
 	/**
 	 * Default Constructor
 	 */
-	private FGHistQuotes(String tickerID, Calendar from, Calendar to)
+	private FGHistoricalQuotes(String tickerID, Calendar from, Calendar to)
 	{
 		this.from = from;
 		this.to = to;
@@ -95,7 +95,7 @@ public class FGHistQuotes
 	 * @param proxyPort
 	 *            The proxy port
 	 */
-	private FGHistQuotes(String proxyHostname, int proxyPort, String tickerID, Calendar from, Calendar to)
+	private FGHistoricalQuotes(String proxyHostname, int proxyPort, String tickerID, Calendar from, Calendar to)
 	{
 		this.from = from;
 		this.to = to;
@@ -108,9 +108,9 @@ public class FGHistQuotes
 	 * 
 	 * @return Historical quotes instance
 	 */
-	public static FGHistQuotes FactoryGetInstance(String tickerID, Calendar from, Calendar to)
+	public static FGHistoricalQuotes FactoryGetInstance(String tickerID, Calendar from, Calendar to)
 	{
-		FGHistQuotes locHistQuotes = new FGHistQuotes(tickerID, from, to);
+		FGHistoricalQuotes locHistQuotes = new FGHistoricalQuotes(tickerID, from, to);
 
 		return locHistQuotes;
 	}
@@ -124,9 +124,9 @@ public class FGHistQuotes
 	 *            The proxy port
 	 * @return Historical quotes instance
 	 */
-	public static FGHistQuotes FactoryGetInstance(String proxyHostname, int proxyPort, String tickerID, Calendar from, Calendar to)
+	public static FGHistoricalQuotes FactoryGetInstance(String proxyHostname, int proxyPort, String tickerID, Calendar from, Calendar to)
 	{
-		FGHistQuotes locHistQuotes = new FGHistQuotes(proxyHostname, proxyPort, tickerID, from, to);
+		FGHistoricalQuotes locHistQuotes = new FGHistoricalQuotes(proxyHostname, proxyPort, tickerID, from, to);
 
 		return locHistQuotes;
 	}
@@ -142,18 +142,18 @@ public class FGHistQuotes
 	{
 		URIBuilder locURIBuilder = new URIBuilder();
 		locURIBuilder.setScheme(this.protocol.getScheme());
-		locURIBuilder.setHost(FGHistQuotes.HOST_SYMBOL_LOOKUP);
-		locURIBuilder.setPath(FGHistQuotes.PATH_SYMBOL_LOOKUP);
-		locURIBuilder.addParameter(FGHistQuotes.QUERY_TICKERID, this.tickerID);
+		locURIBuilder.setHost(FGHistoricalQuotes.HOST_SYMBOL_LOOKUP);
+		locURIBuilder.setPath(FGHistoricalQuotes.PATH_SYMBOL_LOOKUP);
+		locURIBuilder.addParameter(FGHistoricalQuotes.QUERY_TICKERID, this.tickerID);
 
 		// TODO Google Query Date Format
 		DateFormat locDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 		String locStartDate = locDateFormat.format(this.from.getTime());
 		String locEndDate = locDateFormat.format(this.to.getTime());
 
-		locURIBuilder.addParameter(FGHistQuotes.QUERY_START_DATE, locStartDate);
-		locURIBuilder.addParameter(FGHistQuotes.QUERY_END_DATE, locEndDate);
-		locURIBuilder.addParameter(FGHistQuotes.QUERY_OUTPUT, VALUE_OUTPUT_CSV);
+		locURIBuilder.addParameter(FGHistoricalQuotes.QUERY_START_DATE, locStartDate);
+		locURIBuilder.addParameter(FGHistoricalQuotes.QUERY_END_DATE, locEndDate);
+		locURIBuilder.addParameter(FGHistoricalQuotes.QUERY_OUTPUT, VALUE_OUTPUT_CSV);
 
 		return locURIBuilder.build();
 	}
@@ -191,9 +191,9 @@ public class FGHistQuotes
 	 * @throws IOException
 	 * @throws UnsupportedEncodingException
 	 */
-	private FGHistoricalQuotes parseResponse(String response) throws UnsupportedEncodingException, IOException
+	private FGBeanHistoricalQuotes parseResponse(String response) throws UnsupportedEncodingException, IOException
 	{
-		FGHistoricalQuotes locResHistQuotes = new FGHistoricalQuotes();
+		FGBeanHistoricalQuotes locResHistQuotes = new FGBeanHistoricalQuotes();
 
 		InputStreamReader locReaderBOM = new InputStreamReader(new BOMInputStream(IOUtils.toInputStream(response, StandardCharsets.UTF_8.name())), StandardCharsets.UTF_8.name());
 
@@ -201,9 +201,9 @@ public class FGHistQuotes
 
 		locReaderBOM.close();
 
-		List<FGHistoricalQuote> locHistQuoteList = new CsvToBeanBuilder<FGHistoricalQuote>(new StringReader(locResponseWithoutBOM)).withType(FGHistoricalQuote.class).build().parse();
+		List<FGBeanHistoricalQuote> locHistQuoteList = new CsvToBeanBuilder<FGBeanHistoricalQuote>(new StringReader(locResponseWithoutBOM)).withType(FGBeanHistoricalQuote.class).build().parse();
 
-		locResHistQuotes.setHistQuoteList(new ArrayList<FGHistoricalQuote>(locHistQuoteList));
+		locResHistQuotes.setHistQuoteList(new ArrayList<FGBeanHistoricalQuote>(locHistQuoteList));
 
 		return locResHistQuotes;
 	}
@@ -216,9 +216,9 @@ public class FGHistQuotes
 	 * @throws UnsupportedEncodingException
 	 * @throws URISyntaxException
 	 */
-	public FGHistoricalQuotes getResult() throws UnsupportedEncodingException, IOException, URISyntaxException
+	public FGBeanHistoricalQuotes getResult() throws UnsupportedEncodingException, IOException, URISyntaxException
 	{
-		FGHistoricalQuotes locResHistQuotes = new FGHistoricalQuotes();
+		FGBeanHistoricalQuotes locResHistQuotes = new FGBeanHistoricalQuotes();
 
 		String locResponse = this.getResponse();
 

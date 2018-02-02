@@ -35,7 +35,7 @@ import org.apache.hc.core5.net.URIBuilder;
 import api.core.cache.CacheCookieManager;
 import api.core.http.HttpClient;
 import api.core.http.Scheme;
-import api.finance.google.symbol.entity.FGResSymbolLookup;
+import api.finance.google.symbol.entity.FGBeanSymbolLookup;
 
 /**
  * Google Finance Symbol Lookup
@@ -174,11 +174,11 @@ public class FGSymbolLookup
 	 * @return Symbol lookup response object (equal to Google Finance JSON
 	 *         result)
 	 */
-	private FGResSymbolLookup parseResponse(String response)
+	private FGBeanSymbolLookup parseResponse(String response)
 	{
 		Jsonb jsonb = JsonbBuilder.create();
 
-		FGResSymbolLookup locFGResSymbolLookup = jsonb.fromJson(response, FGResSymbolLookup.class);
+		FGBeanSymbolLookup locFGResSymbolLookup = jsonb.fromJson(response, FGBeanSymbolLookup.class);
 
 		return locFGResSymbolLookup;
 	}
@@ -189,9 +189,9 @@ public class FGSymbolLookup
 	 * @return Symbol lookup response object
 	 * @throws Exception
 	 */
-	public FGResSymbolLookup getResult() throws Exception
+	public FGBeanSymbolLookup getResult() throws Exception
 	{
-		FGResSymbolLookup locFGResSymbolLookup = new FGResSymbolLookup();
+		FGBeanSymbolLookup locFGResSymbolLookup = new FGBeanSymbolLookup();
 
 		// get response
 		String locResponse = this.getResponse();

@@ -33,21 +33,21 @@ import java.util.List;
  * @version 1.1.0
  * @since 2018-01-26
  */
-public class FGResSymbolLookup
+public class FGBeanSymbolLookup
 {
-	private List<FGSymbol> matches;
+	private List<FGBeanSymbol> matches;
 
-	public FGResSymbolLookup()
+	public FGBeanSymbolLookup()
 	{
-		this.matches = new ArrayList<FGSymbol>();
+		this.matches = new ArrayList<FGBeanSymbol>();
 	}
 
-	public List<FGSymbol> getMatches()
+	public List<FGBeanSymbol> getMatches()
 	{
 		return matches;
 	}
 
-	public void setMatches(List<FGSymbol> matches)
+	public void setMatches(List<FGBeanSymbol> matches)
 	{
 		this.matches = matches;
 	}

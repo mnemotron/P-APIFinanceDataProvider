@@ -21,67 +21,72 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package api.finance.google.symbol.entity;
+package api.finance.google.histquote.entity;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 /**
- * Symbol Result
+ * BEAN Finance Google Historical Quotes
  * 
  * @author mnemotron
  * @version 1.1.0
  * @since 2018-01-26
  */
-public class FGSymbol
+public class FGBeanHistoricalQuotes
 {
-	private String t;
-	private String n;
-	private String e;
-	private String id;
 
-	public FGSymbol()
+	private String tickerID;
+	private Calendar from;
+	private Calendar to;
+	private List<FGBeanHistoricalQuote> histQuoteList;
+
+	public FGBeanHistoricalQuotes()
 	{
-		this.t = new String();
-		this.n = new String();
-		this.e = new String();
-		this.id = new String();
+		this.tickerID = new String();
+		this.from = null;
+		this.to = null;
+		this.histQuoteList = new ArrayList<FGBeanHistoricalQuote>();
 	}
 
-	public String getT()
+	public String getTickerID()
 	{
-		return t;
+		return tickerID;
 	}
 
-	public void setT(String t)
+	public void setTickerID(String tickerID)
 	{
-		this.t = t;
+		this.tickerID = tickerID;
 	}
 
-	public String getN()
+	public Calendar getFrom()
 	{
-		return n;
+		return from;
 	}
 
-	public void setN(String n)
+	public void setFrom(Calendar from)
 	{
-		this.n = n;
+		this.from = from;
 	}
 
-	public String getE()
+	public Calendar getTo()
 	{
-		return e;
+		return to;
 	}
 
-	public void setE(String e)
+	public void setTo(Calendar to)
 	{
-		this.e = e;
+		this.to = to;
 	}
 
-	public String getId()
+	public List<FGBeanHistoricalQuote> getHistQuoteList()
 	{
-		return id;
+		return histQuoteList;
 	}
 
-	public void setId(String id)
+	public void setHistQuoteList(List<FGBeanHistoricalQuote> histQuoteList)
 	{
-		this.id = id;
+		this.histQuoteList = histQuoteList;
 	}
 }

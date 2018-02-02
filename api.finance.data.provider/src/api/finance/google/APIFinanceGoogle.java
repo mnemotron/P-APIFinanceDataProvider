@@ -38,12 +38,12 @@ import api.core.histquote.entity.HistoricalQuotes;
 import api.core.quote.entity.Quote;
 import api.core.ticker.entity.Ticker;
 import api.core.ticker.entity.Tickers;
-import api.finance.google.histquote.FGHistQuotes;
-import api.finance.google.histquote.entity.FGHistoricalQuote;
-import api.finance.google.histquote.entity.FGHistoricalQuotes;
+import api.finance.google.histquote.FGHistoricalQuotes;
+import api.finance.google.histquote.entity.FGBeanHistoricalQuote;
+import api.finance.google.histquote.entity.FGBeanHistoricalQuotes;
 import api.finance.google.symbol.FGSymbolLookup;
-import api.finance.google.symbol.entity.FGResSymbolLookup;
-import api.finance.google.symbol.entity.FGSymbol;
+import api.finance.google.symbol.entity.FGBeanSymbolLookup;
+import api.finance.google.symbol.entity.FGBeanSymbol;
 
 /**
  * API Google Finance - Interface implementation
@@ -66,20 +66,20 @@ public class APIFinanceGoogle implements InterfaceDataProvider
 
 		locSL.setQuery(query);
 
-		FGResSymbolLookup locFGResSymbolLookup = locSL.getResult();
+		FGBeanSymbolLookup locFGResSymbolLookup = locSL.getResult();
 
 		// map to result
-		List<FGSymbol> locFGSymbolList = locFGResSymbolLookup.getMatches();
+		List<FGBeanSymbol> locFGSymbolList = locFGResSymbolLookup.getMatches();
 
 		locTickers.setQuery(query);
 
-		Iterator<FGSymbol> locIterator = locFGSymbolList.iterator();
+		Iterator<FGBeanSymbol> locIterator = locFGSymbolList.iterator();
 
 		while (locIterator.hasNext())
 		{
 			Ticker locTicker = new Ticker();
 
-			FGSymbol locFGSymbol = locIterator.next();
+			FGBeanSymbol locFGSymbol = locIterator.next();
 
 			if (locFGSymbol == null)
 			{
@@ -110,20 +110,20 @@ public class APIFinanceGoogle implements InterfaceDataProvider
 		HistoricalQuotes locHistoricalQuotes = new HistoricalQuotes();
 		ArrayList<HistoricalQuote> locHistoricalQuoteList = new ArrayList<HistoricalQuote>();
 
-		FGHistQuotes locHistQuotes = FGHistQuotes.FactoryGetInstance(tickerID, from, to);
+		FGHistoricalQuotes locHistQuotes = FGHistoricalQuotes.FactoryGetInstance(tickerID, from, to);
 
 		locHistQuotes.setTickerID(tickerID);
 
-		FGHistoricalQuotes locResHistQuotes = locHistQuotes.getResult();
+		FGBeanHistoricalQuotes locResHistQuotes = locHistQuotes.getResult();
 
 		if (locResHistQuotes != null)
 		{
 			// map to result
 			locHistoricalQuotes.setTickerID(locResHistQuotes.getTickerID());
 
-			ArrayList<FGHistoricalQuote> locHistQuote = locResHistQuotes.getHistQuoteList();
+			List<FGBeanHistoricalQuote> locHistQuote = locResHistQuotes.getHistQuoteList();
 
-			for (FGHistoricalQuote histQuote : locHistQuote)
+			for (FGBeanHistoricalQuote histQuote : locHistQuote)
 			{
 				HistoricalQuote locHistoricalQuote = new HistoricalQuote();
 				Calendar locCalendar = null;
