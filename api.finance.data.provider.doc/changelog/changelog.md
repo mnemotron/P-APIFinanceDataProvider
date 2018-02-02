@@ -1,6 +1,6 @@
 # API Finance Data Provider - Change Log
 
-### [1.1.0] | 2018-xx-xx
+### [1.1.0] | 2018-02-02
 #### ADDED
 ##### General
 + API Manager with option to choose specific Finance Data Provider API
