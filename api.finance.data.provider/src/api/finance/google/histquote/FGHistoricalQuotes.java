@@ -186,7 +186,7 @@ public class FGHistoricalQuotes
 	/**
 	 * Parses and binds the historical quote CSV response.
 	 * 
-	 * @param CSV
+	 * @param response
 	 * @return Historical quote response object
 	 * @throws IOException
 	 * @throws UnsupportedEncodingException
