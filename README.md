@@ -9,3 +9,10 @@
 
 ##### API Simulation
 + historical quotes
+
+# Get Started
+```java
+APIManager locAPIManager = APIManager.FactoryGetInstance(API.GOOGLE_FINANCE);
+HistoricalQuotes locHistoricalQuotes = locAPIManager.getHistoricalQuotes("GOOGL", TimePeriod.YEAR_1, null);
+System.out.println(locHistoricalQuotes.toString());
+```
