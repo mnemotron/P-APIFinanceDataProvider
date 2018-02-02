@@ -8,7 +8,8 @@
 ##### API Simulation
 + historical quote simulation
 
-##### API Yahoo Finance
+##### API Google Finance
++ symbol lookup
 + historical quotes
 
 ### [1.0.0] | 2017-01-12
