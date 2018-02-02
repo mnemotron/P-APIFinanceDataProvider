@@ -34,26 +34,37 @@ import java.util.Date;
  * @version 1.1.0
  * @since 2018-01-26
  */
-public class FGBeanHistoricalQuote {
+public class FGBeanHistoricalQuote
+{
 
 	@CsvBindByName(locale = "en")
-    @CsvDate("dd-MMM-yy")
+	@CsvDate("dd-MMM-yy")
 	private Date date;
-	
-	@CsvBindByName(locale = "en")
-	private double open;
-	
-	@CsvBindByName(locale = "en")
-	private double high;
-	
-	@CsvBindByName(locale = "en")
-	private double low;
-	
-	@CsvBindByName(locale = "en")
-	private double close;
-	
+
 	@CsvBindByName
-	private long volume;
+	private String open;
+
+	@CsvBindByName
+	private String high;
+
+	@CsvBindByName
+	private String low;
+
+	@CsvBindByName
+	private String close;
+
+	@CsvBindByName
+	private String volume;
+
+	public FGBeanHistoricalQuote()
+	{
+		this.date = null;
+		this.open = new String();
+		this.high = new String();
+		this.low = new String();
+		this.close = new String();
+		this.volume = new String();
+	}
 
 	public Date getDate()
 	{
@@ -65,52 +76,52 @@ public class FGBeanHistoricalQuote {
 		this.date = date;
 	}
 
-	public double getOpen()
+	public String getOpen()
 	{
 		return open;
 	}
 
-	public void setOpen(double open)
+	public void setOpen(String open)
 	{
 		this.open = open;
 	}
 
-	public double getHigh()
+	public String getHigh()
 	{
 		return high;
 	}
 
-	public void setHigh(double high)
+	public void setHigh(String high)
 	{
 		this.high = high;
 	}
 
-	public double getLow()
+	public String getLow()
 	{
 		return low;
 	}
 
-	public void setLow(double low)
+	public void setLow(String low)
 	{
 		this.low = low;
 	}
 
-	public double getClose()
+	public String getClose()
 	{
 		return close;
 	}
 
-	public void setClose(double close)
+	public void setClose(String close)
 	{
 		this.close = close;
 	}
 
-	public long getVolume()
+	public String getVolume()
 	{
 		return volume;
 	}
 
-	public void setVolume(long volume)
+	public void setVolume(String volume)
 	{
 		this.volume = volume;
 	}

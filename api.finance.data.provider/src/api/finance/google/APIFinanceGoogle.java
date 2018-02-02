@@ -38,6 +38,7 @@ import api.core.histquote.entity.HistoricalQuotes;
 import api.core.quote.entity.Quote;
 import api.core.ticker.entity.Ticker;
 import api.core.ticker.entity.Tickers;
+import api.core.util.ParseToNumber;
 import api.finance.google.histquote.FGHistoricalQuotes;
 import api.finance.google.histquote.entity.FGBeanHistoricalQuote;
 import api.finance.google.histquote.entity.FGBeanHistoricalQuotes;
@@ -116,52 +117,44 @@ public class APIFinanceGoogle implements InterfaceDataProvider
 
 		FGBeanHistoricalQuotes locResHistQuotes = locHistQuotes.getResult();
 
-		if (locResHistQuotes != null)
+		// map to result
+		locHistoricalQuotes.setTickerID(locResHistQuotes.getTickerID());
+
+		List<FGBeanHistoricalQuote> locHistQuote = locResHistQuotes.getHistQuoteList();
+
+		for (FGBeanHistoricalQuote histQuote : locHistQuote)
 		{
-			// map to result
-			locHistoricalQuotes.setTickerID(locResHistQuotes.getTickerID());
+			HistoricalQuote locHistoricalQuote = new HistoricalQuote();
+			Calendar locCalendar = null;
 
-			List<FGBeanHistoricalQuote> locHistQuote = locResHistQuotes.getHistQuoteList();
-
-			for (FGBeanHistoricalQuote histQuote : locHistQuote)
+			if (histQuote.getDate() != null)
 			{
-				HistoricalQuote locHistoricalQuote = new HistoricalQuote();
-				Calendar locCalendar = null;
-
-				if (histQuote.getDate() != null)
+				try
 				{
-					try
-					{
-						// Date locDate =
-						// locDateFormatter.parse(histQuote.getDate());
-						locCalendar = Calendar.getInstance();
-						// locCalendar.setTime(locDate);
-						locCalendar.setTime(histQuote.getDate());
-
-					}
-					catch (Exception e)
-					{
-
-					}
+					locCalendar = Calendar.getInstance();
+					locCalendar.setTime(histQuote.getDate());
 				}
+				catch (Exception e)
+				{
 
-				locHistoricalQuote.setDate(locCalendar);
-				locHistoricalQuote.setOpen(histQuote.getOpen());
-				locHistoricalQuote.setHigh(histQuote.getHigh());
-				locHistoricalQuote.setLow(histQuote.getLow());
-				locHistoricalQuote.setClose(histQuote.getClose());
-				locHistoricalQuote.setVolume(histQuote.getVolume());
-
-				locHistoricalQuoteList.add(locHistoricalQuote);
+				}
 			}
 
-			locHistoricalQuotes.setTickerID(tickerID);
-			locHistoricalQuotes.setFrom(from);
-			locHistoricalQuotes.setTo(to);
-			locHistoricalQuotes.setHistoricalQuoteList(locHistoricalQuoteList);
+			locHistoricalQuote.setDate(locCalendar);
+			locHistoricalQuote.setOpen(ParseToNumber.parseStringToDouble(histQuote.getOpen()));
+			locHistoricalQuote.setHigh(ParseToNumber.parseStringToDouble(histQuote.getHigh()));
+			locHistoricalQuote.setLow(ParseToNumber.parseStringToDouble(histQuote.getLow()));
+			locHistoricalQuote.setClose(ParseToNumber.parseStringToDouble(histQuote.getClose()));
+			locHistoricalQuote.setVolume(ParseToNumber.parseStringToLong(histQuote.getVolume()));
+
+			locHistoricalQuoteList.add(locHistoricalQuote);
 		}
+
+		locHistoricalQuotes.setTickerID(tickerID);
+		locHistoricalQuotes.setFrom(from);
+		locHistoricalQuotes.setTo(to);
+		locHistoricalQuotes.setHistoricalQuoteList(locHistoricalQuoteList);
 
 		return locHistoricalQuotes;
 	}
-
 }
