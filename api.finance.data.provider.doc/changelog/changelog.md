@@ -1,5 +1,10 @@
 # API Finance Data Provider - Change Log
 
+### [1.2.0] | 2018-02-03
+#### ADDED
+##### API Stooq
++ historical quotes
+
 ### [1.1.0] | 2018-02-02
 #### ADDED
 ##### General
