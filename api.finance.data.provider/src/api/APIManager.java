@@ -33,6 +33,7 @@ import api.core.quote.entity.Quote;
 import api.core.ticker.entity.Tickers;
 import api.finance.google.APIFinanceGoogle;
 import api.finance.simulation.APIFinanceSimulation;
+import api.finance.stooq.APIFinanceStooq;
 import api.finance.yahoo.APIFinanceYahoo;
 
 /**
@@ -69,6 +70,10 @@ public class APIManager implements InterfaceDataProvider
 
 		case GOOGLE_FINANCE:
 			this.dataProvider = new APIFinanceGoogle();
+			break;
+			
+		case STOOQ:
+			this.dataProvider = new APIFinanceStooq();
 			break;
 
 		case SIMULATION:

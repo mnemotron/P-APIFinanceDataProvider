@@ -1,5 +1,5 @@
 /*
- *  MIT License
+ * MIT License
  *
  * Copyright (c) 2018 mnemotron
  *
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package api.finance.google.histquote;
+package api.finance.stooq.histquote;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -44,61 +44,51 @@ import org.apache.hc.core5.net.URIBuilder;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 
+import api.core.histquote.Interval;
 import api.core.http.HttpClient;
 import api.core.http.Scheme;
-import api.finance.google.histquote.entity.FGBeanHistoricalQuote;
-import api.finance.google.histquote.entity.FGBeanHistoricalQuotes;
+import api.finance.stooq.histquote.entity.FSBeanHistoricalQuote;
+import api.finance.stooq.histquote.entity.FSBeanHistoricalQuotes;
 
 /**
- * Google Finance Historical Quotes
+ * Stooq Historical Quotes
  * 
  * For example: 
- * Request: URL <https://finance.google.com/finance/historical?q=GOOGL&startdate=Jan+1%2C+2010&enddate=Jan+1%2C+2018&output=csv>
+ * Request: URL <https://stooq.com/q/d/l/?s=googl.us&d1=20100819&d2=2018020&i=d>
  * Response: CSV
  * 
  * @author mnemotron
- * @version 1.1.0
- * @since 2018-01-22
+ * @version 1.2.0
+ * @since 2018-02-03
  */
-public class FGHistoricalQuotes
+public class FSHistoricalQuotes
 {
-
-	private static final String HOST_SYMBOL_LOOKUP = "finance.google.com";
-	private static final String PATH_SYMBOL_LOOKUP = "/finance/historical";
-	private static final String QUERY_TICKERID = "q";
-	private static final String QUERY_START_DATE = "startdate";
-	private static final String QUERY_END_DATE = "enddate";
-	private static final String QUERY_OUTPUT = "output";
-	private static final String VALUE_OUTPUT_CSV = "csv";
+	private static final String HOST_SYMBOL_LOOKUP = "stooq.com";
+	private static final String PATH_SYMBOL_LOOKUP = "/q/d/l";
+	private static final String QUERY_TICKERID = "s";
+	private static final String QUERY_START_DATE = "d1";
+	private static final String QUERY_END_DATE = "d2";
+	private static final String QUERY_INTERVAL = "i";
+	private static final String QUERY_INTERVAL_DAYLY = "d";
+	private static final String QUERY_INTERVAL_WEEKLY = "w";
+	private static final String QUERY_INTERVAL_MONTHLY = "m";
+	private static final String QUERY_INTERVAL_QUARTERLY = "q";
+	private static final String QUERY_INTERVAL_YEARLY = "y";
 
 	private Calendar from;
 	private Calendar to;
+	private Interval interval;
 	private Scheme protocol;
 	private String tickerID;
 
 	/**
 	 * Default Constructor
 	 */
-	private FGHistoricalQuotes(String tickerID, Calendar from, Calendar to)
+	private FSHistoricalQuotes(String tickerID, Calendar from, Calendar to, Interval interval)
 	{
 		this.from = from;
 		this.to = to;
-		this.protocol = Scheme.HTTPS;
-		this.tickerID = tickerID;
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param proxyHostname
-	 *            The proxy hostname
-	 * @param proxyPort
-	 *            The proxy port
-	 */
-	private FGHistoricalQuotes(String proxyHostname, int proxyPort, String tickerID, Calendar from, Calendar to)
-	{
-		this.from = from;
-		this.to = to;
+		this.interval = interval;
 		this.protocol = Scheme.HTTPS;
 		this.tickerID = tickerID;
 	}
@@ -108,54 +98,11 @@ public class FGHistoricalQuotes
 	 * 
 	 * @return Historical quotes instance
 	 */
-	public static FGHistoricalQuotes FactoryGetInstance(String tickerID, Calendar from, Calendar to)
+	public static FSHistoricalQuotes FactoryGetInstance(String tickerID, Calendar from, Calendar to, Interval interval)
 	{
-		FGHistoricalQuotes locHistQuotes = new FGHistoricalQuotes(tickerID, from, to);
+		FSHistoricalQuotes locHistQuotes = new FSHistoricalQuotes(tickerID, from, to, interval);
 
 		return locHistQuotes;
-	}
-
-	/**
-	 * Factory
-	 * 
-	 * @param proxyHostname
-	 *            The proxy hostname
-	 * @param proxyPort
-	 *            The proxy port
-	 * @return Historical quotes instance
-	 */
-	public static FGHistoricalQuotes FactoryGetInstance(String proxyHostname, int proxyPort, String tickerID, Calendar from, Calendar to)
-	{
-		FGHistoricalQuotes locHistQuotes = new FGHistoricalQuotes(proxyHostname, proxyPort, tickerID, from, to);
-
-		return locHistQuotes;
-	}
-
-	/**
-	 * Builds the URL
-	 * 
-	 * @return URI
-	 * @throws URISyntaxException
-	 * @throws MalformedURLException
-	 */
-	private URI buildURI() throws MalformedURLException, URISyntaxException
-	{
-		URIBuilder locURIBuilder = new URIBuilder();
-		locURIBuilder.setScheme(this.protocol.getScheme());
-		locURIBuilder.setHost(FGHistoricalQuotes.HOST_SYMBOL_LOOKUP);
-		locURIBuilder.setPath(FGHistoricalQuotes.PATH_SYMBOL_LOOKUP);
-		locURIBuilder.addParameter(FGHistoricalQuotes.QUERY_TICKERID, this.tickerID);
-
-		// TODO Google Query Date Format
-		DateFormat locDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-		String locStartDate = locDateFormat.format(this.from.getTime());
-		String locEndDate = locDateFormat.format(this.to.getTime());
-
-		locURIBuilder.addParameter(FGHistoricalQuotes.QUERY_START_DATE, locStartDate);
-		locURIBuilder.addParameter(FGHistoricalQuotes.QUERY_END_DATE, locEndDate);
-		locURIBuilder.addParameter(FGHistoricalQuotes.QUERY_OUTPUT, VALUE_OUTPUT_CSV);
-
-		return locURIBuilder.build();
 	}
 
 	/**
@@ -182,7 +129,7 @@ public class FGHistoricalQuotes
 
 		return locResponse;
 	}
-
+	
 	/**
 	 * Parses and binds the historical quote CSV response.
 	 * 
@@ -191,9 +138,9 @@ public class FGHistoricalQuotes
 	 * @throws IOException
 	 * @throws UnsupportedEncodingException
 	 */
-	private FGBeanHistoricalQuotes parseResponse(String response) throws UnsupportedEncodingException, IOException
+	private FSBeanHistoricalQuotes parseResponse(String response) throws UnsupportedEncodingException, IOException
 	{
-		FGBeanHistoricalQuotes locResHistQuotes = new FGBeanHistoricalQuotes();
+		FSBeanHistoricalQuotes locHistQuotes = new FSBeanHistoricalQuotes();
 
 		InputStreamReader locReaderBOM = new InputStreamReader(new BOMInputStream(IOUtils.toInputStream(response, StandardCharsets.UTF_8.name())), StandardCharsets.UTF_8.name());
 
@@ -201,13 +148,61 @@ public class FGHistoricalQuotes
 
 		locReaderBOM.close();
 
-		List<FGBeanHistoricalQuote> locHistQuoteList = new CsvToBeanBuilder<FGBeanHistoricalQuote>(new StringReader(locResponseWithoutBOM)).withType(FGBeanHistoricalQuote.class).build().parse();
+		List<FSBeanHistoricalQuote> locHistQuoteList = new CsvToBeanBuilder<FSBeanHistoricalQuote>(new StringReader(locResponseWithoutBOM)).withType(FSBeanHistoricalQuote.class).build().parse();
 
-		locResHistQuotes.setHistQuoteList(new ArrayList<FGBeanHistoricalQuote>(locHistQuoteList));
+		locHistQuotes.setHistQuoteList(new ArrayList<FSBeanHistoricalQuote>(locHistQuoteList));
 
-		return locResHistQuotes;
+		return locHistQuotes;
 	}
+	
+	/**
+	 * Builds the URL
+	 * 
+	 * @return URI
+	 * @throws URISyntaxException
+	 * @throws MalformedURLException
+	 */
+	private URI buildURI() throws MalformedURLException, URISyntaxException
+	{
+		URIBuilder locURIBuilder = new URIBuilder();
+		locURIBuilder.setScheme(this.protocol.getScheme());
+		locURIBuilder.setHost(FSHistoricalQuotes.HOST_SYMBOL_LOOKUP);
+		locURIBuilder.setPath(FSHistoricalQuotes.PATH_SYMBOL_LOOKUP);
+		locURIBuilder.addParameter(FSHistoricalQuotes.QUERY_TICKERID, this.tickerID);
 
+		DateFormat locDateFormat = new SimpleDateFormat("yyyyMMdd");
+		String locStartDate = locDateFormat.format(this.from.getTime());
+		String locEndDate = locDateFormat.format(this.to.getTime());
+
+		locURIBuilder.addParameter(FSHistoricalQuotes.QUERY_START_DATE, locStartDate);
+		locURIBuilder.addParameter(FSHistoricalQuotes.QUERY_END_DATE, locEndDate);
+
+		String locInterval = new String();
+
+		switch (this.interval)
+		{
+		case WEEK_1:
+			locInterval = FSHistoricalQuotes.QUERY_INTERVAL_WEEKLY;
+			break;
+		case MONTH_1:
+			locInterval = FSHistoricalQuotes.QUERY_INTERVAL_MONTHLY;
+			break;
+		case QUARTER_1:
+			locInterval = FSHistoricalQuotes.QUERY_INTERVAL_QUARTERLY;
+			break;
+		case YEAR_1:
+			locInterval = FSHistoricalQuotes.QUERY_INTERVAL_YEARLY;
+			break;
+		default:
+			locInterval = FSHistoricalQuotes.QUERY_INTERVAL_DAYLY;
+			break;
+		}
+
+		locURIBuilder.addParameter(FSHistoricalQuotes.QUERY_INTERVAL, locInterval);
+
+		return locURIBuilder.build();
+	}
+	
 	/**
 	 * Get result
 	 * 
@@ -216,18 +211,18 @@ public class FGHistoricalQuotes
 	 * @throws UnsupportedEncodingException
 	 * @throws URISyntaxException
 	 */
-	public FGBeanHistoricalQuotes getResult() throws UnsupportedEncodingException, IOException, URISyntaxException
+	public FSBeanHistoricalQuotes getResult() throws UnsupportedEncodingException, IOException, URISyntaxException
 	{
-		FGBeanHistoricalQuotes locResHistQuotes = new FGBeanHistoricalQuotes();
+		FSBeanHistoricalQuotes locHistQuotes = new FSBeanHistoricalQuotes();
 
 		String locResponse = this.getResponse();
 
 		if (!locResponse.isEmpty())
 		{
-			locResHistQuotes = this.parseResponse(locResponse);
+			locHistQuotes = this.parseResponse(locResponse);
 		}
 
-		return locResHistQuotes;
+		return locHistQuotes;
 	}
 
 	public Calendar getFrom()
@@ -248,6 +243,16 @@ public class FGHistoricalQuotes
 	public void setTo(Calendar to)
 	{
 		this.to = to;
+	}
+
+	public Interval getInterval()
+	{
+		return interval;
+	}
+
+	public void setInterval(Interval interval)
+	{
+		this.interval = interval;
 	}
 
 	public Scheme getProtocol()

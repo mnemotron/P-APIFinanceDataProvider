@@ -21,28 +21,72 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package api.core.histquote;
+package api.finance.stooq.histquote.entity;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 /**
- * ENUM Interval
+ * BEAN Stooq Historical Quotes
  * 
  * @author mnemotron
  * @version 1.1.0
- * @since 2018-01-20
+ * @since 2018-01-26
  */
-public enum Interval
+public class FSBeanHistoricalQuotes
 {
-	DAY_1("1D"), WEEK_1("1W"), MONTH_1("1M"), QUARTER_1("1Q"), YEAR_1("1Y");
 
-	private final String interval;
+	private String tickerID;
+	private Calendar from;
+	private Calendar to;
+	private List<FSBeanHistoricalQuote> histQuoteList;
 
-	Interval(String interval)
+	public FSBeanHistoricalQuotes()
 	{
-		this.interval = interval;
+		this.tickerID = new String();
+		this.from = null;
+		this.to = null;
+		this.histQuoteList = new ArrayList<FSBeanHistoricalQuote>();
 	}
 
-	public String getInterval()
+	public String getTickerID()
 	{
-		return this.interval;
+		return tickerID;
+	}
+
+	public void setTickerID(String tickerID)
+	{
+		this.tickerID = tickerID;
+	}
+
+	public Calendar getFrom()
+	{
+		return from;
+	}
+
+	public void setFrom(Calendar from)
+	{
+		this.from = from;
+	}
+
+	public Calendar getTo()
+	{
+		return to;
+	}
+
+	public void setTo(Calendar to)
+	{
+		this.to = to;
+	}
+
+	public List<FSBeanHistoricalQuote> getHistQuoteList()
+	{
+		return histQuoteList;
+	}
+
+	public void setHistQuoteList(List<FSBeanHistoricalQuote> histQuoteList)
+	{
+		this.histQuoteList = histQuoteList;
 	}
 }

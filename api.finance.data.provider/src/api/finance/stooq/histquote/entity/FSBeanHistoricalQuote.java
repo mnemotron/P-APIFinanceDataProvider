@@ -21,72 +21,108 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package api.finance.google.histquote.entity;
+package api.finance.stooq.histquote.entity;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvDate;
+import java.util.Date;
 
 /**
- * BEAN Stooq Historical Quotes
+ * BEAN Stooq Historical Quote
  * 
  * @author mnemotron
  * @version 1.2.0
  * @since 2018-02-03
  */
-public class FGBeanHistoricalQuotes
+public class FSBeanHistoricalQuote
 {
 
-	private String tickerID;
-	private Calendar from;
-	private Calendar to;
-	private List<FGBeanHistoricalQuote> histQuoteList;
+	@CsvBindByName
+	@CsvDate("yyyy-MM-dd")
+	private Date date;
 
-	public FGBeanHistoricalQuotes()
+	@CsvBindByName
+	private String open;
+
+	@CsvBindByName
+	private String high;
+
+	@CsvBindByName
+	private String low;
+
+	@CsvBindByName
+	private String close;
+
+	@CsvBindByName
+	private String volume;
+
+	public FSBeanHistoricalQuote()
 	{
-		this.tickerID = new String();
-		this.from = null;
-		this.to = null;
-		this.histQuoteList = new ArrayList<FGBeanHistoricalQuote>();
+		this.date = null;
+		this.open = new String();
+		this.high = new String();
+		this.low = new String();
+		this.close = new String();
+		this.volume = new String();
 	}
 
-	public String getTickerID()
+	public Date getDate()
 	{
-		return tickerID;
+		return date;
 	}
 
-	public void setTickerID(String tickerID)
+	public void setDate(Date date)
 	{
-		this.tickerID = tickerID;
+		this.date = date;
 	}
 
-	public Calendar getFrom()
+	public String getOpen()
 	{
-		return from;
+		return open;
 	}
 
-	public void setFrom(Calendar from)
+	public void setOpen(String open)
 	{
-		this.from = from;
+		this.open = open;
 	}
 
-	public Calendar getTo()
+	public String getHigh()
 	{
-		return to;
+		return high;
 	}
 
-	public void setTo(Calendar to)
+	public void setHigh(String high)
 	{
-		this.to = to;
+		this.high = high;
 	}
 
-	public List<FGBeanHistoricalQuote> getHistQuoteList()
+	public String getLow()
 	{
-		return histQuoteList;
+		return low;
 	}
 
-	public void setHistQuoteList(List<FGBeanHistoricalQuote> histQuoteList)
+	public void setLow(String low)
 	{
-		this.histQuoteList = histQuoteList;
+		this.low = low;
+	}
+
+	public String getClose()
+	{
+		return close;
+	}
+
+	public void setClose(String close)
+	{
+		this.close = close;
+	}
+
+	public String getVolume()
+	{
+		return volume;
+	}
+
+	public void setVolume(String volume)
+	{
+		this.volume = volume;
 	}
 }
