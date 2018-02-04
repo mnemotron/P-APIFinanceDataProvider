@@ -7,6 +7,9 @@
 ##### API Yahoo Finance
 + symbol lookup
 
+##### API Stooq
++ historical quotes
+
 ##### API Simulation
 + historical quotes
 
