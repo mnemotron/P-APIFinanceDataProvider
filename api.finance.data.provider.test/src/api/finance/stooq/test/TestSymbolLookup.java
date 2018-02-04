@@ -17,7 +17,7 @@ public class TestSymbolLookup
 	String[] split = p.split(input);
 	
 	for (String string : split)
-	{
+	{ 
 //		String locSplit = new String();
 //		locSplit.split("~");
 		System.out.println(string);
