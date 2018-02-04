@@ -45,8 +45,7 @@ import api.finance.google.symbol.entity.FGBeanSymbolLookup;
  * 1. Request to get the P3P Cookie: URL <https://finance.google.com/finance>
  * Response: P3P Cookie
  * 
- * 2. Request: URL
- * <https://finance.google.com/finance/match?matchtype=matchall&q=google>
+ * 2. Request: URL <https://finance.google.com/finance/match?matchtype=matchall&q=google>
  * Response: JSON (equal to the symbol lookup entities)
  * 
  * @author mnemotron
