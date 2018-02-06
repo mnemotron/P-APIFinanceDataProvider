@@ -37,6 +37,7 @@ import api.core.util.ParseToNumber;
 import api.finance.stooq.histquote.FSHistoricalQuotes;
 import api.finance.stooq.histquote.entity.FSBeanHistoricalQuote;
 import api.finance.stooq.histquote.entity.FSBeanHistoricalQuotes;
+import api.finance.stooq.symbol.FSSymbolLookup;
 
 /**
  * API Stooq - Interface implementation
@@ -51,7 +52,11 @@ public class APIFinanceStooq implements InterfaceDataProvider
 	@Override
 	public Tickers searchTicker(String query) throws Exception
 	{
-		return new Tickers();
+		FSSymbolLookup locSymbolLookup = FSSymbolLookup.FactoryGetInstance();
+		
+		locSymbolLookup.setQuery(query);
+		
+		return locSymbolLookup.getResult();
 	}
 
 	@Override
