@@ -8,6 +8,7 @@
 + symbol lookup
 
 ##### API Stooq
++ symbol lookup
 + historical quotes
 
 ##### API Simulation
