@@ -14,7 +14,7 @@
 ##### API IEX
 ... planned
 
-##### Quote Media
+##### API Quote Media
 ... planned
 
 ##### API Simulation
