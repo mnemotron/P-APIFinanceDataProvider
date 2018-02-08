@@ -11,6 +11,12 @@
 + symbol lookup
 + historical quotes
 
+##### API IEX
+... planned
+
+##### Quote Media
+... planned
+
 ##### API Simulation
 + historical quotes
 
