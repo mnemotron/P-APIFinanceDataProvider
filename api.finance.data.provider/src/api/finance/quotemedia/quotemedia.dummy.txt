@@ -1,0 +1,498 @@
+https://app.quotemedia.com/quotetools/getHistoryDownload.csv?&webmasterId=501&startDay=02&startMonth=02&startYear=2002&endDay=02&endMonth=07&endYear=2009&isRanged=false&symbol=GOOGL
+
+date,open,high,low,close,volume,changed,changep,adjclose,tradeval,tradevol
+2009-07-31,449.98,452.70,442.43,443.05,2860323,-1.296,-0.58%,221.7465,N/A,N/A
+2009-07-30,442.61,451.47,442.61,445.64,3198547,4.705,2.15%,223.0428,N/A,N/A
+2009-07-29,437.23,437.80,431.885,436.24,1985979,-1.807,-0.82%,218.3381,N/A,N/A
+
+
+SymbolLookup:
+http://app.quotemedia.com/quotetools/lookupSymbolsJson.go?jsoncallback=jsonp1518104860022&_=1518104868852&searchString=go&searchBy=name&matchOn=undefined&page=1&resultsPerPage=60&marketId=11&countryCode=US&webmasterId=501&jsoncallback=%3F
+
+jsonp1518104860022({
+   "symbolLookup": [
+   
+   	   {
+       "name":"ASA Gold And Precious Met",
+       "symbol":"ASA:NDD",
+       "exchange":"NDD",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"ASA Gold and Precious Metals Limited",
+       "symbol":"ASA",
+       "exchange":"NYSE",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Abzu Gold Ltd",
+       "symbol":"ABZUF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Affinity Gold Corp",
+       "symbol":"AFYG",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Aguila American Gold New",
+       "symbol":"AGLAF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Alacer Gold Corp Cdi",
+       "symbol":"ALACF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Alacer Gold Corp Ord",
+       "symbol":"ALIAF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Alamos Gold",
+       "symbol":"AGI:NDD",
+       "exchange":"NDD",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Alamos Gold Inc. Class A",
+       "symbol":"AGI",
+       "exchange":"NYSE",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Alio Gold Inc. (Canada)",
+       "symbol":"ALO",
+       "exchange":"NYSE American",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"All American Gold Corp",
+       "symbol":"AAGC",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Allegiant Gold Ltd - Ordinary Shares",
+       "symbol":"AZLLF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Alliance Gold Mines Nl",
+       "symbol":"AEGMF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Altair Gold Inc",
+       "symbol":"AAEEF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Amador Gold Corp. New",
+       "symbol":"ADRGF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Amani Gold Ltd",
+       "symbol":"BRYYF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"American Paramount Gold",
+       "symbol":"APGA",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"American Sierra Gold Corp",
+       "symbol":"AMNP",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Andes Gold Corp",
+       "symbol":"AGCZ",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Angel Gold Corp Ord New",
+       "symbol":"ANGCF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Angel Gold Corp.",
+       "symbol":"CAEUF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Ankor Gold Corp Ord",
+       "symbol":"ANKOF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Antioqua Gold Inc",
+       "symbol":"AGDXF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Antler Gold Inc - Ordinary Shares",
+       "symbol":"ALRGF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Argo Gold Inc",
+       "symbol":"ARBTF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Argonaut Gold Inc Ord",
+       "symbol":"ARNGF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Arizona Gold And Onyx Mng",
+       "symbol":"VGCP",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Asanko Gold",
+       "symbol":"AKG:NDD",
+       "exchange":"NDD",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Asanko Gold Inc.",
+       "symbol":"AKG",
+       "exchange":"NYSE American",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Astur Gold Corp",
+       "symbol":"ATRGF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Atacama Pacific Gold Corp",
+       "symbol":"ACPGF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Atlanta Gold Inc",
+       "symbol":"ATLDF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Aurcrest Gold Inc",
+       "symbol":"TBMIF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Auriga Gold Crp Ord New",
+       "symbol":"AGRDF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Austral Gold Ltd Ord",
+       "symbol":"AGLDF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Avino Silver & Gold Mines",
+       "symbol":"ASM:NDD",
+       "exchange":"NDD",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Avino Silver & Gold Mines Ltd. (Canada)",
+       "symbol":"ASM",
+       "exchange":"NYSE American",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Azteca Gold Corp",
+       "symbol":"AZGFF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"B4MC Gold Mines Inc",
+       "symbol":"BFMC",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Bandera Gold",
+       "symbol":"BDRGF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Banks Island Gold Ltd.",
+       "symbol":"BKSLF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Banyan Gold",
+       "symbol":"BYAGF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Barkerville Gold Mns Ltd",
+       "symbol":"BGMZF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Baroyeca Gold & Silver",
+       "symbol":"BRYGF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Barrick Gold",
+       "symbol":"ABX:NDD",
+       "exchange":"NDD",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Barrick Gold Corporation",
+       "symbol":"ABX",
+       "exchange":"NYSE",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Batero Gold Corp Ord",
+       "symbol":"BELDF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Battle Mountain Gold Inc",
+       "symbol":"BMTNF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Besra Gold Inc",
+       "symbol":"BSRAF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"BetaPro Canadian Gold Miners 2x Daily Bull ETF",
+       "symbol":"HZNSF",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Big 5 Sporting Goods",
+       "symbol":"BGFV:NDD",
+       "exchange":"NDD",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Big 5 Sporting Goods Corporation",
+       "symbol":"BGFV",
+       "exchange":"NGS",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Blackrock Enhanced Gov",
+       "symbol":"EGF:NDD",
+       "exchange":"NDD",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Blue Gold Water Technologies Ltd",
+       "symbol":"GOSSD",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Bmo Junior Gold Index Ord",
+       "symbol":"BMJJF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Bonanza Goldfields Corp",
+       "symbol":"BONZ",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Brightrock Gold Corp",
+       "symbol":"BRGC",
+       "exchange":"OTCPK",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Buccaneer Gold Corp",
+       "symbol":"VRBRF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"Bullion Gold Resources Corp",
+       "symbol":"TTEXF",
+       "exchange":"Greys",
+       "type":"Equity"
+
+       },
+   
+   	   {
+       "name":"CABCO Series 2004-101 Trust Goldman Sachs Capital I Floating Rate Callable Certificates",
+       "symbol":"GYB",
+       "exchange":"NYSE",
+       "type":"Equity"
+
+       }
+            
+   
+   ],
+   "totalHits":"60"       
+});
