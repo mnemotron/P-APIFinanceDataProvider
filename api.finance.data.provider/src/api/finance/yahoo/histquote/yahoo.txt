@@ -4,7 +4,20 @@ https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.hi
 https://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.historicaldata where symbol="BMW" and startDate = "2016-06-25" and endDate = "2016-07-03"&format=json&diagnostics=true&env=store://datatables.org/alltableswithkeys
 
 WORKS:
+https://query1.finance.yahoo.com/v7/finance/download/GOOGL?period1=1486594800&period2=1518217200&interval=1d&events=history&crumb=X0zfxv/Ju57
+--> CSV
+https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1486594800&period2=1518217200&interval=1d
+
+
+Period 1: 9.02.2017 Period 2: 10.02.2018
+UNIX timestamp seconds since January 1, 1970
+https://www.epochconverter.com/
+
+	long epoch = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").parse("01/01/1970 01:00:00").getTime() / 1000;
+String date = new java.text.SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(new java.util.Date (epoch*1000));
+
 https://query1.finance.yahoo.com/v8/finance/chart/AAPL?interval=2m
+--> JSON
 
 
     AAPL substituted with your stock ticker

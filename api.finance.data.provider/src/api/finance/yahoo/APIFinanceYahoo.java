@@ -33,6 +33,8 @@ import api.core.histquote.entity.HistoricalQuotes;
 import api.core.quote.entity.Quote;
 import api.core.ticker.entity.Ticker;
 import api.core.ticker.entity.Tickers;
+import api.finance.yahoo.histquote.FYHistoricalQuotes;
+import api.finance.yahoo.histquote.entity.FYBeanHistoricalQuotes;
 import api.finance.yahoo.symbol.FYSymbolLookup;
 import api.finance.yahoo.symbol.entity.FYBeanSymbolLookup;
 import api.finance.yahoo.symbol.entity.ResultSet;
@@ -100,8 +102,14 @@ public class APIFinanceYahoo implements InterfaceDataProvider
 	}
 
 	@Override
-	public HistoricalQuotes getHistoricalQuotes(String tickerID, Calendar from, Calendar to, Interval interval)
+	public HistoricalQuotes getHistoricalQuotes(String tickerID, Calendar from, Calendar to, Interval interval) throws Exception
 	{
-		return new HistoricalQuotes();
+		HistoricalQuotes locHistoricalQuotes = new HistoricalQuotes();
+		
+		FYHistoricalQuotes locHistQuotes = FYHistoricalQuotes.FactoryGetInstance(tickerID, from, to, interval);
+		
+		FYBeanHistoricalQuotes locBeanHistQuotes = locHistQuotes.getResult();
+		
+		return locHistoricalQuotes;
 	}
 }

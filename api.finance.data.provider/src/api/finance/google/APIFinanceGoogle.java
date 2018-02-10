@@ -23,9 +23,6 @@
  */
 package api.finance.google;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -105,9 +102,8 @@ public class APIFinanceGoogle implements InterfaceDataProvider
 	}
 
 	@Override
-	public HistoricalQuotes getHistoricalQuotes(String tickerID, Calendar from, Calendar to, Interval interval) throws UnsupportedEncodingException, IOException, URISyntaxException
+	public HistoricalQuotes getHistoricalQuotes(String tickerID, Calendar from, Calendar to, Interval interval) throws Exception
 	{
-
 		HistoricalQuotes locHistoricalQuotes = new HistoricalQuotes();
 		List<HistoricalQuote> locHistoricalQuoteList = new ArrayList<HistoricalQuote>();
 

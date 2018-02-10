@@ -39,12 +39,12 @@ import api.finance.yahoo.symbol.entity.FYBeanSymbolLookup;
 /**
  * Yahoo Finance Symbol Lookup
  * 
- * For example: Request: URL
- * <https://autoc.finance.yahoo.com/autoc?query=bmw&region=EU&lang=en-GB>
+ * For example: 
+ * Request: URL <https://autoc.finance.yahoo.com/autoc?query=bmw&region=EU&lang=en-GB>
  * Response: JSON (equal to the symbol lookup entities)
  * 
- * Alternative (not implemented): Request: URL
- * <http://d.yimg.com/aq/autoc?query=bmw&region=DE&lang=en-US&callback=YAHOO.util.ScriptNodeDataSource.callbacks>
+ * Alternative (not implemented): 
+ * Request: URL <http://d.yimg.com/aq/autoc?query=bmw&region=DE&lang=en-US&callback=YAHOO.util.ScriptNodeDataSource.callbacks>
  * 
  * @author mnemotron
  * @version 1.0.0
