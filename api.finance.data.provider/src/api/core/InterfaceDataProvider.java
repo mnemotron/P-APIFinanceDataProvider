@@ -24,6 +24,7 @@
 package api.core;
 
 import java.util.Calendar;
+import java.util.Map;
 
 import api.core.histquote.Interval;
 import api.core.histquote.TimePeriod;
@@ -55,6 +56,13 @@ public interface InterfaceDataProvider
 	 * @return The quote of the ticker ID
 	 */
 	public Quote getQuote(String tickerID) throws Exception;
+	
+	/**
+	 * Get historical quotes from different ticker IDs
+	 * 
+	 * @return Hash map key: ticker ID, value: BEAN historical quotes
+	 */
+	public Map<String, HistoricalQuotes> getHistoricalQuoteList() throws Exception;
 
 	/**
 	 * Get historical quotes

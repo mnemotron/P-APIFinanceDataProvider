@@ -25,7 +25,9 @@ package api.core.histquote.entity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import api.core.histquote.Interval;
 
@@ -43,11 +45,13 @@ public class HistoricalQuotes
 	private Calendar from;
 	private Calendar to;
 	private List<HistoricalQuote> historicalQuoteList;
+	private Map<String, String> attributeList;
 
 	public HistoricalQuotes()
 	{
 		this.historicalQuoteList = new ArrayList<HistoricalQuote>();
-		this.tickerID = null;
+		this.attributeList = new HashMap<String, String>();
+		this.tickerID = new String();
 		this.interval = null;
 		this.from = null;
 		this.to = null;
@@ -101,6 +105,16 @@ public class HistoricalQuotes
 	public void setTo(Calendar to)
 	{
 		this.to = to;
+	}
+
+	public Map<String, String> getAttributeList()
+	{
+		return attributeList;
+	}
+
+	public void setAttributeList(Map<String, String> attributeList)
+	{
+		this.attributeList = attributeList;
 	}
 
 	public String toString()
