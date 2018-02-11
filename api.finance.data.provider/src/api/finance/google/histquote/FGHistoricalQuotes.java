@@ -203,6 +203,9 @@ public class FGHistoricalQuotes
 
 		List<FGBeanHistoricalQuote> locHistQuoteList = new CsvToBeanBuilder<FGBeanHistoricalQuote>(new StringReader(locResponseWithoutBOM)).withType(FGBeanHistoricalQuote.class).build().parse();
 
+		locResHistQuotes.setTickerID(this.tickerID);
+		locResHistQuotes.setFrom(this.from);
+		locResHistQuotes.setTo(this.to);
 		locResHistQuotes.setHistQuoteList(new ArrayList<FGBeanHistoricalQuote>(locHistQuoteList));
 
 		return locResHistQuotes;

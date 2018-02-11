@@ -28,8 +28,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Instant;
-import java.time.ZoneId;
 import java.util.Calendar;
 
 import javax.json.bind.Jsonb;
@@ -50,8 +48,13 @@ import api.finance.yahoo.histquote.entity.FYBeanHistoricalQuotes;
  * <https://query1.finance.yahoo.com/v8/finance/chart/GOOGL?period1=1486594800&period2=1518217200&interval=1d>
  * Response: JSON
  * 
- * Supported intervals: 1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo,
- * 3mo
+ * Alternate request: URL <https://query1.finance.yahoo.com/v7/finance/download/GOOGL?period1=1486594800&period2=1518217200&interval=1d&events=history&crumb=X0zfxv/Ju57>
+ * Response: CSV
+ * 
+ * Supported intervals: 1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo
+ * 
+ * Start date (period1) and end date (period2) are UNIX timestamps (seconds since January 1, 1970)
+ * Check URL <https://www.epochconverter.com/>
  * 
  * @author mnemotron
  * @version 1.3.0

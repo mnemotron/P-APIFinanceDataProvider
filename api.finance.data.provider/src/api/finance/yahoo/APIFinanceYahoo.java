@@ -26,9 +26,11 @@ package api.finance.yahoo;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.List;
 
 import api.core.InterfaceDataProvider;
 import api.core.histquote.Interval;
+import api.core.histquote.entity.HistoricalQuote;
 import api.core.histquote.entity.HistoricalQuotes;
 import api.core.quote.entity.Quote;
 import api.core.ticker.entity.Ticker;
@@ -105,10 +107,18 @@ public class APIFinanceYahoo implements InterfaceDataProvider
 	public HistoricalQuotes getHistoricalQuotes(String tickerID, Calendar from, Calendar to, Interval interval) throws Exception
 	{
 		HistoricalQuotes locHistoricalQuotes = new HistoricalQuotes();
+		List<HistoricalQuote> locHistoricalQuoteList = new ArrayList<HistoricalQuote>();
 		
 		FYHistoricalQuotes locHistQuotes = FYHistoricalQuotes.FactoryGetInstance(tickerID, from, to, interval);
 		
 		FYBeanHistoricalQuotes locBeanHistQuotes = locHistQuotes.getResult();
+		
+//		locBeanHistQuotes.getChart().
+		
+		locHistoricalQuotes.setTickerID(tickerID);
+		locHistoricalQuotes.setFrom(from);
+		locHistoricalQuotes.setTo(to);
+		locHistoricalQuotes.setHistoricalQuoteList(locHistoricalQuoteList);
 		
 		return locHistoricalQuotes;
 	}

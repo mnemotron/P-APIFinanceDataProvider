@@ -109,12 +109,12 @@ public class APIFinanceGoogle implements InterfaceDataProvider
 
 		FGHistoricalQuotes locHistQuotes = FGHistoricalQuotes.FactoryGetInstance(tickerID, from, to);
 
-		locHistQuotes.setTickerID(tickerID);
-
 		FGBeanHistoricalQuotes locResHistQuotes = locHistQuotes.getResult();
 
 		// map to result
 		locHistoricalQuotes.setTickerID(locResHistQuotes.getTickerID());
+		locHistoricalQuotes.setFrom(locResHistQuotes.getFrom());
+		locHistoricalQuotes.setTo(locResHistQuotes.getTo());
 
 		List<FGBeanHistoricalQuote> locHistQuote = locResHistQuotes.getHistQuoteList();
 
@@ -146,9 +146,6 @@ public class APIFinanceGoogle implements InterfaceDataProvider
 			locHistoricalQuoteList.add(locHistoricalQuote);
 		}
 
-		locHistoricalQuotes.setTickerID(tickerID);
-		locHistoricalQuotes.setFrom(from);
-		locHistoricalQuotes.setTo(to);
 		locHistoricalQuotes.setHistoricalQuoteList(locHistoricalQuoteList);
 
 		return locHistoricalQuotes;
