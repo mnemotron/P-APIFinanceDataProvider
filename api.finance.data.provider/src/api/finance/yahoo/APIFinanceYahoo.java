@@ -113,7 +113,7 @@ public class APIFinanceYahoo implements InterfaceDataProvider
 		
 		FYBeanHistoricalQuotes locBeanHistQuotes = locHistQuotes.getResult();
 		
-//		locBeanHistQuotes.getChart().
+//		locBeanHistQuotes.getChart(). 
 		
 		locHistoricalQuotes.setTickerID(tickerID);
 		locHistoricalQuotes.setFrom(from);
