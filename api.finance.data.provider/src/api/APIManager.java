@@ -24,6 +24,7 @@
 package api;
 
 import java.util.Calendar;
+import java.util.Map;
 
 import api.core.API;
 import api.core.InterfaceDataProvider;
@@ -102,6 +103,12 @@ public class APIManager implements InterfaceDataProvider
 	public HistoricalQuotes getHistoricalQuotes(String tickerID, Calendar from, Calendar to, Interval interval) throws Exception
 	{
 		return this.dataProvider.getHistoricalQuotes(tickerID, from, to, interval);
+	}
+
+	@Override
+	public Map<String, HistoricalQuotes> getHistoricalQuoteList() throws Exception
+	{
+		return null;
 	}
 
 }

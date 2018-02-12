@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import api.core.histquote.Attribute;
 import api.core.histquote.Interval;
 
 /**
@@ -45,12 +46,12 @@ public class HistoricalQuotes
 	private Calendar from;
 	private Calendar to;
 	private List<HistoricalQuote> historicalQuoteList;
-	private Map<String, String> attributeList;
+	private Map<Attribute, String> attributeList;
 
 	public HistoricalQuotes()
 	{
 		this.historicalQuoteList = new ArrayList<HistoricalQuote>();
-		this.attributeList = new HashMap<String, String>();
+		this.attributeList = new HashMap<Attribute, String>();
 		this.tickerID = new String();
 		this.interval = null;
 		this.from = null;
@@ -107,12 +108,12 @@ public class HistoricalQuotes
 		this.to = to;
 	}
 
-	public Map<String, String> getAttributeList()
+	public Map<Attribute, String> getAttributeList()
 	{
 		return attributeList;
 	}
 
-	public void setAttributeList(Map<String, String> attributeList)
+	public void setAttributeList(Map<Attribute, String> attributeList)
 	{
 		this.attributeList = attributeList;
 	}
@@ -120,47 +121,52 @@ public class HistoricalQuotes
 	public String toString()
 	{
 		StringBuilder locStringBuilder = new StringBuilder();
+		String locLineBreak = System.getProperty("line.separator");
 
-		if(this.tickerID != null)
+		if (this.tickerID != null)
 		{
-			locStringBuilder.append("tickerID:" + this.getTickerID() + "\n");
+			locStringBuilder.append("tickerID:" + this.getTickerID() + locLineBreak);
 		}
 		else
 		{
-			locStringBuilder.append("tickerID:" + "null" + "\n");
-		}
-		
-		if(this.interval!= null)
-		{
-			locStringBuilder.append("interval:" + this.getInterval().getInterval() + "\n");
-		}
-		else
-		{
-			locStringBuilder.append("interval:" + "null" + "\n");
-		}
-		
-		if(this.from != null)
-		{
-			locStringBuilder.append("from:" + this.getFrom().toInstant().toString() + "\n");
-		}
-		else
-		{
-			locStringBuilder.append("from:" + "null" + "\n");
-		}
-		
-		if(this.to != null)
-		{
-			locStringBuilder.append("to:" + this.getTo().toInstant().toString() + "\n");	
-		}
-		else
-		{
-			locStringBuilder.append("to:" + "null" + "\n");
+			locStringBuilder.append("tickerID:" + "null" + locLineBreak);
 		}
 
+		if (this.interval != null)
+		{
+			locStringBuilder.append("interval:" + this.getInterval().getInterval() + locLineBreak);
+		}
+		else
+		{
+			locStringBuilder.append("interval:" + "null" + locLineBreak);
+		}
+
+		if (this.from != null)
+		{
+			locStringBuilder.append("from:" + this.getFrom().toInstant().toString() + locLineBreak);
+		}
+		else
+		{
+			locStringBuilder.append("from:" + "null" + locLineBreak);
+		}
+
+		if (this.to != null)
+		{
+			locStringBuilder.append("to:" + this.getTo().toInstant().toString() + locLineBreak);
+		}
+		else
+		{
+			locStringBuilder.append("to:" + "null" + locLineBreak);
+		}
+
+		for (Map.Entry<Attribute, String> entry : attributeList.entrySet())
+		{
+			locStringBuilder.append(entry.getKey() + ":" + entry.getValue() + locLineBreak);
+		}
 
 		for (HistoricalQuote historicalQuote : historicalQuoteList)
 		{
-			locStringBuilder.append(historicalQuote.toString() + "\n");
+			locStringBuilder.append(historicalQuote.toString() + locLineBreak);
 		}
 
 		return locStringBuilder.toString();

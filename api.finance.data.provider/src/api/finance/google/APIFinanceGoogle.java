@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import api.core.InterfaceDataProvider;
 import api.core.histquote.Interval;
@@ -149,5 +150,12 @@ public class APIFinanceGoogle implements InterfaceDataProvider
 		locHistoricalQuotes.setHistoricalQuoteList(locHistoricalQuoteList);
 
 		return locHistoricalQuotes;
+	}
+
+	@Override
+	public Map<String, HistoricalQuotes> getHistoricalQuoteList() throws Exception
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
