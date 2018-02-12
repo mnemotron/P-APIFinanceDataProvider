@@ -1,7 +1,10 @@
 # API Finance Data Provider - Change Log
 
-### [1.3.0] | 2018-XX-XX
+### [1.3.0] | 2018-02-12
 #### ADDED
+##### API Yahoo Finance
++ historical data
+
 ##### API Stooq
 + symbol lookup
 

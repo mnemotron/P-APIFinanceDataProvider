@@ -16,6 +16,9 @@ api.finance.simulation
 api.finance.stooq
 api.finance.stooq.histquote
 api.finance.stooq.histquote.entity
+api.finance.stooq.symbol
 api.finance.yahoo
+api.finance.yahoo.histquote
+api.finance.yahoo.histquote.entity
 api.finance.yahoo.symbol
 api.finance.yahoo.symbol.entity
