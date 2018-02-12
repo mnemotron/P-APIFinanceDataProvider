@@ -46,7 +46,7 @@ query:G
 // create API manager instance i.e. to get Google Finance data
 APIManager locAPIManager = APIManager.FactoryGetInstance(API.GOOGLE_FINANCE);
 
-// get historical data with ticker ID: "GOOGL", time period: 1 year, interval: not yet supported
+// get historical data with ticker ID: "GOOGL", time period: 1 year, interval: not yet supported for Google
 HistoricalQuotes locHistoricalQuotes = locAPIManager.getHistoricalQuotes("GOOGL", TimePeriod.YEAR_1, null);
 
 // print result
