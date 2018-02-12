@@ -6,7 +6,7 @@
 
 ##### API Yahoo Finance
 + symbol lookup
-+ historical quotes [Release 1.3.0]
++ historical quotes
 
 ##### API Stooq
 + symbol lookup
